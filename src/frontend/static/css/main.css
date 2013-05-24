@@ -1,0 +1,17 @@
+button.coin {
+    height: 65px;
+    width: 65px;
+    border-radius: 50px;
+    border: 1px solid #000;
+}
+
+button.card {
+	
+}
+
+#parking_state #SPOT_0 {
+	float: left;
+}
+
+#parking_state #SPOT_1 {
+}
