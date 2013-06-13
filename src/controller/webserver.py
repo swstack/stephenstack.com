@@ -1,5 +1,6 @@
 from bottle import run
-from backend.routes import Router
+from controller.routes import Router
+from util.paths import HTTP_TEMPLATES
 import jinja2
 import logging
 
@@ -19,8 +20,3 @@ class WebServer(Router):
 
     def serve_forever(self):
         run(host=self.host, port=self.port, quiet=True)
-
-    
-
-if __name__ == "__main__":
-    WebServer().serve_forever()
