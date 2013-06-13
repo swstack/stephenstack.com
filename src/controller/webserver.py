@@ -18,5 +18,23 @@ class WebServer(Router):
         Router.__init__(self)
         self.template_vars = {}
 
-    def serve_forever(self):
+    #================================================================================
+    # Private/Protected
+    #================================================================================
+
+    #================================================================================
+    # Public Interface
+    #================================================================================
+    def start(self):
         run(host=self.host, port=self.port, quiet=True)
+
+    def handle_request_get(self, request):
+        """Must return"""
+        index = jinja_env.get_template("index.html")
+        return index.render(self.template_vars)
+
+    def handle_request_post(self, request):
+        pass
+
+    def handle_request_static(self, request):
+        pass
