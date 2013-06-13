@@ -35,6 +35,3 @@ class WebServer(Router):
 
     def handle_request_post(self, request):
         pass
-
-    def handle_request_static(self, request):
-        pass

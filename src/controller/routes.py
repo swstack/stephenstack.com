@@ -1,4 +1,4 @@
-from bottle import route, redirect, static_file, post, get, request
+from bottle import route, static_file, get, request
 from util.paths import HTTP_STATIC
 import logging
 
@@ -16,7 +16,7 @@ class Router(object):
 
 @get('/static/<filepath:path>')
 def static(filepath):
-    return webserver.handle_request_static(request)
+    return static_file(filepath, root=HTTP_STATIC)
 
 
 @route("/")
