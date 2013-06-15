@@ -24,5 +24,4 @@ class Database(object):
         self.session = scoped_session(sessionmaker(bind=self.engine,
                                                    autocommit=False,
                                                    autoflush=True))
-        print self.db_string
         self.create_db_if_needed()

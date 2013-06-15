@@ -1,14 +1,34 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="row">
-<div class="span12">
-    <ul class="nav nav-tabs">
-	    <li class="active customtab"><a href="#home" data-toggle="tab">Home</a></li>
-	    <li class="customtab"><a href="#profile" data-toggle="tab">Profile</a></li>
-	    <li class="customtab"><a href="#messages" data-toggle="tab">Messages</a></li>
-	    <li class="customtab"><a href="#settings" data-toggle="tab">Settings</a></li>
-    </ul>
+	<div class="span12">
+	    <ul class="nav nav-tabs">
+		    <li class="active customtab"><a href="#home" data-toggle="tab">Home</a></li>
+		    <li class="customtab"><a href="#profile" data-toggle="tab">Profile</a></li>
+		    <li class="customtab"><a href="#codes" data-toggle="tab">Da Codes</a></li>
+		    <li class="customtab"><a href="#playground" data-toggle="tab">Playground</a></li>
+		    <li class="customtab"><a href="#login" data-toggle="tab">Login</a></li>
+	    </ul>
+	</div>
 </div>
+<div class="row">
+    <div class="tab-content">
+        <div id="home" class="tab-pane active">
+            {% include "home.html" %}
+        </div>
+        <div id="profile" class="tab-pane">
+            {% include "profile.html" %}
+        </div>
+        <div id="codes" class="tab-pane">
+            {% include "codes.html" %}
+        </div>
+        <div id="playground" class="tab-pane">
+            {% include "playground.html" %}
+        </div>
+        <div id="login" class="tab-pane">
+            {% include "login.html" %}
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -30,6 +50,22 @@ $('#settings a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');
 })
+
+$("#login").click(function() {
+
+    var url = "/login"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#login_form").serialize(), // serializes the form's elements.
+           success: function(data) {
+
+           }
+         });
+
+    return false; // avoid to execute the actual submit of the form.
+});
 
 </script>
 {% endblock %}

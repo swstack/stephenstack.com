@@ -15,10 +15,17 @@ class WebServer(Router, Thread):
     port = 8080
     host = "localhost"
 
-    def __init__(self):
+    def __init__(self, login_manager):
         Thread.__init__(self)
         Router.__init__(self)
         self.template_vars = {}
+        self.login_manager = login_manager
+
+    #================================================================================
+    # Private/Protected
+    #================================================================================
+    def _refresh_template_vars(self):
+        self.template_vars["users"] = self.login_manager.get_users()
 
     #================================================================================
     # Thread Interface
@@ -27,12 +34,13 @@ class WebServer(Router, Thread):
         run(host=self.host, port=self.port, quiet=True)
 
     #================================================================================
-    # Public Interface
+    # Route Interface
     #================================================================================
-    def handle_request_get(self, request):
-        """Must return"""
+    def handle_index(self):
+        self._refresh_template_vars()
         index = jinja_env.get_template("index.html")
         return index.render(self.template_vars)
 
-    def handle_request_post(self, request):
-        pass
+    def handle_login(self, username, password):
+        self.login_manager.on_login(username, password)
+        self._refresh_template_vars()
