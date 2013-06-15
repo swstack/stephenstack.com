@@ -30,6 +30,7 @@ dist
 log.txt*
 *.pdo
 tmp/
+*.db
 
 # Sphinx Ignores
 docs/Makefile
