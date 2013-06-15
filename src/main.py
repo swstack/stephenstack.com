@@ -1,8 +1,10 @@
+from controller.database import Database
 from controller.webserver import WebServer
-from util.logging_configurator import LoggingConfigurator
 from logging import getLogger
-import os
+from model.model import User
+from util.logging_configurator import LoggingConfigurator
 from util.paths import ROOT
+import os
 
 logger = getLogger("main")
 
@@ -13,9 +15,17 @@ if __name__ == "__main__":
                 file_path=os.path.join(ROOT, "logs", "log.txt"),
                 level="INFO")
     web_server = WebServer()
+    database = Database()
 
     # Start all components
     logging_configurator.start()
 
     logger.info("Starting WebServer")
     web_server.start()
+
+    logger.info("Starting Database")
+    database.start()
+
+    db = database.get_session()
+
+    print db.query(User).all()
