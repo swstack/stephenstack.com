@@ -7,7 +7,7 @@ from util.paths import STORE_DIR
 
 class Database(object):
 
-    db_string = "sqlite:////%s/wamcsim.db" % STORE_DIR
+    db_string = "sqlite:////%s/store.db" % STORE_DIR
 
     def __init__(self):
         self.engine = None
