@@ -19,6 +19,11 @@ def static(filepath):
     return static_file(filepath, root=HTTP_STATIC)
 
 
+@get("/clientupdate")
+def client_update():
+    return webserver.handle_web_self_update()
+
+
 @route("/")
 def index():
     return webserver.handle_index()

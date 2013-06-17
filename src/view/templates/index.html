@@ -34,22 +34,16 @@
 
 {% block js %}
 <script>
-$('#home a').click(function (e) {
-	e.preventDefault();
-    $(this).tab('show');
-})
-$('#profile a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-})
-$('#messages a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-})
-$('#settings a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-})
+
+$(".customtab").click(updateSelf);
+
+function updateSelf() {
+	var url = "/clientupdate"; // the script where you handle the form input.
+	$.ajax({
+        type: "GET",
+        url: url,
+	});
+}
 
 $("#login").click(function() {
 
@@ -59,10 +53,7 @@ $("#login").click(function() {
            type: "POST",
            url: url,
            data: $("#login_form").serialize(), // serializes the form's elements.
-           success: function(data) {
-
-           }
-         });
+    });
 
     return false; // avoid to execute the actual submit of the form.
 });

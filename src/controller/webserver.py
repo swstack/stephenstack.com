@@ -18,14 +18,14 @@ class WebServer(Router, Thread):
     def __init__(self, login_manager):
         Thread.__init__(self)
         Router.__init__(self)
-        self.template_vars = {}
+        self._template_vars = {}
         self.login_manager = login_manager
 
     #================================================================================
     # Private/Protected
     #================================================================================
     def _refresh_template_vars(self):
-        self.template_vars["users"] = self.login_manager.get_users()
+        self._template_vars["users"] = self.login_manager.get_users()
 
     #================================================================================
     # Thread Interface
@@ -39,8 +39,12 @@ class WebServer(Router, Thread):
     def handle_index(self):
         self._refresh_template_vars()
         index = jinja_env.get_template("index.html")
-        return index.render(self.template_vars)
+        return index.render(self._template_vars)
 
     def handle_login(self, username, password):
         self.login_manager.on_login(username, password)
         self._refresh_template_vars()
+
+    def handle_web_self_update(self):
+        self._refresh_template_vars()
+        return self._template_vars
