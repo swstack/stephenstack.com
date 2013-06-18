@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block body %}
 <div>
     <h1>Login Form</h1>
     <form id="login_form">
@@ -10,3 +12,21 @@
         <input id="login_input" type="submit" value="login">
     </form>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+$("#login").click(function() {
+
+    var url = "/do_login"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#login_form").serialize(), // serializes the form's elements.
+    });
+
+    return false; // avoid to execute the actual submit of the form.
+});
+</script>
+{% endblock %}

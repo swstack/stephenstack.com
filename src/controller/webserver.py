@@ -15,17 +15,18 @@ class WebServer(Router, Thread):
     port = 8080
     host = "localhost"
 
-    def __init__(self, login_manager):
+    def __init__(self, login_manager, resume_builder):
         Thread.__init__(self)
         Router.__init__(self)
         self._template_vars = {}
         self.login_manager = login_manager
+        self.resume_builder = resume_builder
 
     #================================================================================
     # Private/Protected
     #================================================================================
-    def _refresh_template_vars(self):
-        self._template_vars["users"] = self.login_manager.get_users()
+    def _login(self, username, password):
+        self.login_manager.on_login(username, password)
 
     #================================================================================
     # Thread Interface
@@ -36,15 +37,26 @@ class WebServer(Router, Thread):
     #================================================================================
     # Route Interface
     #================================================================================
-    def handle_index(self):
-        self._refresh_template_vars()
-        index = jinja_env.get_template("index.html")
-        return index.render(self._template_vars)
+    def handle_home(self):
+        home = jinja_env.get_template("home.html")
+        return home.render()
 
-    def handle_login(self, username, password):
-        self.login_manager.on_login(username, password)
-        self._refresh_template_vars()
+    def handle_profile(self):
+        profile = jinja_env.get_template("profile.html")
+        resume = self.resume_builder.get_pdf_resume()
+        return profile.render({"resume": resume})
 
-    def handle_web_self_update(self):
-        self._refresh_template_vars()
-        return self._template_vars
+    def handle_da_codes(self):
+        codes = jinja_env.get_template("codes.html")
+        return codes.render()
+
+    def handle_playground(self):
+        playground = jinja_env.get_template("playground.html")
+        return playground.render({"users": self.login_manager.get_users()})
+
+    def handle_login(self):
+        login = jinja_env.get_template("login.html")
+        return login.render()
+
+    def handle_do_login(self, username, password):
+        self._login(username, password)

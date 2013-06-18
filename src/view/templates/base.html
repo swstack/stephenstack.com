@@ -1,5 +1,4 @@
 <!-- Meant for Extension -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,13 +9,29 @@
   </head>
   <body>
   <div class="container">
-      {% block body %}
-      {% endblock %}
+		<div class="row">
+		    <div class="span12">
+		        <ul class="nav nav-tabs">
+		            <li class="active customtab"><a href="home">Home</a></li>
+		            <li class="customtab"><a href="profile">Profile</a></li>
+		            <li class="customtab"><a href="codes">Da Codes</a></li>
+		            <li class="customtab"><a href="playground">Playground</a></li>
+		            <li class="customtab"><a href="login">Login</a></li>
+		        </ul>
+		    </div>
+		</div>
+       {% block body %}
+       {% endblock %}
   </div>
   {% block js %}
   {% endblock %}
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="/static/js/bootstrap.js"></script>
   <script src="/static/js/bootstrap-datepicker.js"></script>
+  <script>
+  $('.customtab').click(function (e) {
+	  $('.customtab li.active').removeClass('active');
+  });
+  </script>
   </body>
 </html>
