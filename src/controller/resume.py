@@ -1,23 +1,58 @@
+from StringIO import StringIO
 from docx import getdocumenttext, opendocx
-import sys
+from pdfminer.converter import TextConverter, HTMLConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfdevice import PDFDevice
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter, \
+    PDFTextExtractionNotAllowed, process_pdf
+from pdfminer.pdfparser import PDFParser, PDFDocument
+from util.paths import HTTP_STATIC
+import os
 
 
-if __name__ == '__main__':
-    try:
-        document = opendocx(sys.argv[1])
-        newfile = open(sys.argv[2], 'w')
-    except:
-        print('Please supply an input and output file. For example:')
-        print('''  example-extracttext.py 'My Office 2007 document.docx' 'outputfile.txt' ''')
-        exit()
-    ## Fetch all the text out of the document we just created
-    paratextlist = getdocumenttext(document)
+class ResumeBuilder(object):
+    def __init__(self):
+        self._pdf_path = None
+        self._docx_path = None
+        self._docx_resume = None
+        self._paratextlist = None
+        self._pdf_resume = None
 
-    # Make explicit unicode version
-    newparatextlist = []
-    for paratext in paratextlist:
-        newparatextlist.append(paratext.encode("utf-8"))
+    @property
+    def _resume(self):
+        if not self._docx_resume:
+            self._docx_resume = \
+                opendocx(os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_17_2013.docx"))
+            self._paratextlist = getdocumenttext(self._docx_resume)
+        return self._docx_resume
 
-    ## Print our documnts test with two newlines under each paragraph
-    newfile.write('\n\n'.join(newparatextlist))
-    #print '\n\n'.join(newparatextlist)
+    def _dfs(self, treenode):
+        children = treenode.getchildren()
+        for child in children:
+            print child.text
+            self._dfs(child)
+
+    def start(self):
+        self._docx_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_17_2013.docx")
+        self._pdf_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_22_2013.pdf")
+
+    def get_docx_resume(self):
+        root = self._resume
+        self._dfs(root)
+
+    def get_pdf_resume(self, password=""):
+        if not self._pdf_resume:
+            rsrcmgr = PDFResourceManager()
+            retstr = StringIO()
+            codec = 'utf-8'
+            laparams = LAParams()
+            device = HTMLConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+
+            fp = file(self._pdf_path, 'rb')
+            process_pdf(rsrcmgr, device, fp)
+            fp.close()
+            device.close()
+
+            self._pdf_resume = retstr.getvalue()
+            retstr.close()
+        return self._pdf_resume
