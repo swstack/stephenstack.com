@@ -43,7 +43,7 @@ class WebServer(Router, Thread):
 
     def handle_profile(self):
         profile = jinja_env.get_template("profile.html")
-        resume = self.resume_builder.get_pdf_resume()
+        resume = self.resume_builder.get_html_resume()
         return profile.render({"resume": resume})
 
     def handle_da_codes(self):

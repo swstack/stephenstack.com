@@ -1,3 +1,4 @@
+from BeautifulSoup import BeautifulSoup
 from StringIO import StringIO
 from docx import getdocumenttext, opendocx
 from pdfminer.converter import TextConverter, HTMLConverter
@@ -17,6 +18,7 @@ class ResumeBuilder(object):
         self._docx_resume = None
         self._paratextlist = None
         self._pdf_resume = None
+        self._html_path = None
 
     @property
     def _resume(self):
@@ -33,14 +35,16 @@ class ResumeBuilder(object):
             self._dfs(child)
 
     def start(self):
-        self._docx_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_17_2013.docx")
+#        self._docx_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_17_2013.docx")
         self._pdf_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_22_2013.pdf")
+        self._html_path = os.path.join(HTTP_STATIC, "Stack_Stephen_Resume_5_22_2013.htm")
 
     def get_docx_resume(self):
         root = self._resume
         self._dfs(root)
 
     def get_pdf_resume(self, password=""):
+        """Return html"""
         if not self._pdf_resume:
             rsrcmgr = PDFResourceManager()
             retstr = StringIO()
@@ -55,4 +59,11 @@ class ResumeBuilder(object):
 
             self._pdf_resume = retstr.getvalue()
             retstr.close()
-        return self._pdf_resume
+        soup = BeautifulSoup(self._pdf_resume)
+        return soup.prettify()
+
+    def get_html_resume(self):
+        """Return html"""
+        raw = open(self._html_path).read()
+        soup = BeautifulSoup(raw)
+        return soup.prettify()
