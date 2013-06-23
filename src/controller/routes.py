@@ -20,29 +20,13 @@ def static(filepath):
 
 
 @route("/")
-@route("/home")
 def index():
-    return webserver.handle_home()
+    return webserver.handle_index()
 
 
-@route("/profile")
-def profile():
-    return webserver.handle_profile()
-
-
-@route("/codes")
-def codes():
-    return webserver.handle_da_codes()
-
-
-@route("/playground")
-def playground():
-    return webserver.handle_playground()
-
-
-@route("/login")
-def login():
-    return webserver.handle_login()
+@route("/web_refresh")
+def web_refresh():
+    return webserver.web_refresh()
 
 
 @post("/do_login")

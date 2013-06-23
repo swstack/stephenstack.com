@@ -37,22 +37,14 @@ class WebServer(Router, Thread):
     #================================================================================
     # Route Interface
     #================================================================================
-    def handle_home(self):
-        home = jinja_env.get_template("home.html")
-        return home.render()
+    def handle_index(self):
+        index = jinja_env.get_template("index.html")
+        return index.render(self._template_vars)
 
-    def handle_profile(self):
-        profile = jinja_env.get_template("profile.html")
-        resume = self.resume_builder.get_html_resume()
-        return profile.render({"resume": resume})
-
-    def handle_da_codes(self):
-        codes = jinja_env.get_template("codes.html")
-        return codes.render()
-
-    def handle_playground(self):
-        playground = jinja_env.get_template("playground.html")
-        return playground.render({"users": self.login_manager.get_users()})
+    def web_refresh(self):
+        self._template_vars["resume"] = self.resume_builder.get_html_resume()
+        self._template_vars["users"] = self.login_manager.get_users()
+        return self.handle_index()
 
     def handle_login(self):
         login = jinja_env.get_template("login.html")
