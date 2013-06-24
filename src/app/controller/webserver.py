@@ -1,27 +1,29 @@
 from bottle import route, static_file, get, request, post, run
-from threading import Thread
-import logging
 
 
 HOST = "localhost"
 PORT = 8080
 
-templates = None
-static_root = None
+appcore = None
 
 
-def start(_templates, _static_root):
-    global templates, static_root
-    templates = _templates
-    static_root = _static_root
+def start(_appcore):
+    global appcore
+    appcore = _appcore
     run(host=HOST, port=PORT, quiet=True)
 
 
 @get('/static/<filepath:path>')
 def static(filepath):
-    return static_file(filepath, root=static_root)
+    return static_file(filepath, root=appcore.get_static_root())
+
+
+@post("/login")
+def login():
+    params = request.params
+    appcore.login(params["username"], params["password"])
 
 
 @route("/")
 def index():
-    return templates.get_index()
+    return appcore.get_index()

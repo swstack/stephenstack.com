@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 {% block body %}
 <!------------------ HEADER ---------------------->
-<div class="span12 tabbable row">
-    <ul class="nav nav-tabs">
-        <li class="active customtab"><a data-toggle="tab" href="#home">Home</a></li>
-        <li class="customtab"><a data-toggle="tab" href="#profile">Profile</a></li>
-        <li class="customtab"><a data-toggle="tab" href="#codes">Da Codes</a></li>
-        <li class="customtab"><a data-toggle="tab" href="#playground">Playground</a></li>
-        <li class="customtab"><a data-toggle="tab" href="#login">Login</a></li>
-    </ul>
+<div class="row">
+	<div class="span11 tabbable">
+	    <ul class="nav nav-tabs">
+	        <li class="active customtab"><a data-toggle="tab" href="#home">Home</a></li>
+	        <li class="customtab"><a data-toggle="tab" href="#profile">Profile</a></li>
+	        <li class="customtab"><a data-toggle="tab" href="#codes">Da Codes</a></li>
+	        <li class="customtab"><a data-toggle="tab" href="#playground">Playground</a></li>
+	        <li class="customtab"><a data-toggle="tab" href="#login">Login</a></li>
+	    </ul>
+	</div>
+	<div class="span1">
+	    {% if user %}
+	       {{ user.name }}
+	    {% endif %}
+	</div>
 </div>
 
 <div class="tab-content row">
@@ -56,33 +63,41 @@
 	        <input type="text" name="username" placeholder="username">
 	        <input type="password" name="password" placeholder="password">
 	        <span>
-	            <input type="checkbox" name="checkbox">
 	            <label for="checkbox">remember</label>
+	            <input type="checkbox" name="checkbox">
 	        </span>
 	        <input id="login_input" type="submit" value="login">
 	    </form>
+	    <div id="login_success" class="alert alert-success hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Welcome back</h4>
+        </div>
+        <div id="login_fail" class="alert alert-error hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Username already taken</h4>
+        </div>
 	</div>
 </div>
 {% endblock %}
 
 {% block js %}
 <script>
-$(document).ready(function() {
-	var url = "/web_refresh";
-	$.ajax({
-		   type: "GET",
-           url: url,
-	});
-});
-
 $("#login").click(function() {
-    var url = "/do_login"; // the script where you handle the form input.
+    var url = "/login";
     $.ajax({
            type: "POST",
            url: url,
-           data: $("#login_form").serialize(), // serializes the form's elements.
+           data: $("#login_form").serialize(),
+           success: function(success) {
+               if (success) {
+            	   $("#login_success").show();
+            	   $("#login_success").fadeOut(5000);
+               } else {
+            	   $("#login_fail").show();
+            	   $("#login_fail").fadeOut(5000);
+               }
+           },
     });
-    return false; // avoid to execute the actual submit of the form.
 });
 </script>
 {% endblock %}

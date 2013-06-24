@@ -13,6 +13,6 @@ class TemplateBuilder(object):
                         self._resource_manager.get_fs_resource_path("templates")),
                 autoescape=True)
 
-    def get_index(self):
+    def get_index(self, template_vars):
         index = self._jinja_env.get_template("index.html")
-        return index.render()
+        return index.render(template_vars)

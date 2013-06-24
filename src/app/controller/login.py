@@ -8,7 +8,7 @@ class LoginManager(object):
     def start(self):
         pass
 
-    def on_login(self, username, password):
+    def login(self, username, password):
         db = self.database.get_session()
         user = User()
         user.username = username

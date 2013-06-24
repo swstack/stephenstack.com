@@ -10,6 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String)
     password = Column(String)
+    cups_of_coffee = Column(Integer)
 
     def __repr__(self):
         return "<User('%s','%s')>" % (self.username, self.password)

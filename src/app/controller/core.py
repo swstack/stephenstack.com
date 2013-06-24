@@ -19,11 +19,19 @@ class ApplicationCore(object):
     """Main component aggregator and Business logic"""
 
     def __init__(self):
+        #============================================================================
+        # Main Components
+        #============================================================================
         self.resource_manager = None
         self.logging_configurator = None
         self.database = None
         self.resume_builder = None
         self.template_builder = None
+
+        #============================================================================
+        # Internals
+        #============================================================================
+        self._static_root = None
 
     def _start_component(self, component_name, component):
         logger.info("Starting %s...", component_name)
@@ -60,9 +68,7 @@ class ApplicationCore(object):
 
         self._start_component("Database", self.database)
 
-        webserver_args = (self.template_builder, self.resource_manager.get_fs_resource_root())
-        webserver = Thread(target=start_webserver, args=webserver_args)
-        self._start_component("Webserver", webserver)
+        self._start_component("Webserver", Thread(target=start_webserver, args=(self, )))
 
         try:
             while True:
@@ -70,3 +76,19 @@ class ApplicationCore(object):
         except KeyboardInterrupt:
             print "Interrupt received... shutting down"
             os._exit(0)
+
+    def get_static_root(self):
+        """Return path to the static root for the http webserver, caching the
+        value to reduce cpu cycles"""
+        if not self._static_root:
+            self._static_root = self.resource_manager.get_fs_resource_root()
+        return self._static_root
+
+    def get_index(self):
+        return self.template_builder.get_index({
+                        "users": self.login_manager.get_users(),
+                        "resume": self.resume_builder.get_resume(),
+        })
+
+    def login(self, username, password):
+        self.login_manager.login(username, password)

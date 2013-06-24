@@ -1,8 +1,4 @@
 from BeautifulSoup import BeautifulSoup
-from StringIO import StringIO
-from pdfminer.converter import HTMLConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfinterp import PDFResourceManager, process_pdf
 
 
 class ResumeBuilder(object):
@@ -10,6 +6,7 @@ class ResumeBuilder(object):
         self._resource_manager = resource_manager
         self._docx_path = self._resource_manager.get_fs_resource_path("resume.docx")
         self._pdf_path = self._resource_manager.get_fs_resource_path("resume.pdf")
+        self._html_path = self._resource_manager.get_fs_resource_path("resume.htm")
 
         # Will hold the HTML formatted resume
         self._resume = None
@@ -19,18 +16,7 @@ class ResumeBuilder(object):
 
     def get_resume(self):
         if not self._resume:
-            rsrcmgr = PDFResourceManager()
-            retstr = StringIO()
-            codec = 'utf-8'
-            laparams = LAParams()
-            device = HTMLConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-
-            fp = file(self._pdf_path, 'rb')
-            process_pdf(rsrcmgr, device, fp)
-            fp.close()
-            device.close()
-
-            soup = BeautifulSoup(retstr.getvalue())
-            retstr.close()
+            raw = open(self._html_path).read()
+            soup = BeautifulSoup(raw)
             self._resume = soup.prettify()
         return self._resume
