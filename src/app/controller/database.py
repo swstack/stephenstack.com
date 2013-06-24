@@ -2,7 +2,9 @@ from model.model import Base
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.orm.session import sessionmaker
-from util.paths import STORE_DIR
+import os
+
+STORE_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "store"))
 
 
 class Database(object):
