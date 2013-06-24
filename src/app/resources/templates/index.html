@@ -58,43 +58,26 @@
 	
 	<!------------------ TAB LOGIN ---------------------->
 	<div id="login" class="tab-pane">
-	    <h1>Login Form</h1>
-	    <form id="login_form">
-	        <input type="text" name="username" placeholder="username">
-	        <input type="password" name="password" placeholder="password">
-	        <span>
-	            <label for="checkbox">remember</label>
-	            <input type="checkbox" name="checkbox">
-	        </span>
-	        <input id="login_input" type="submit" value="login">
-	    </form>
-	    <div id="login_success" class="alert alert-success hide">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Welcome back</h4>
-        </div>
-        <div id="login_fail" class="alert alert-error hide">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Username already taken</h4>
-        </div>
+	    {% include "login.html" %}
 	</div>
 </div>
 {% endblock %}
 
 {% block js %}
 <script>
-$("#login").click(function() {
-    var url = "/login";
+$("#login_input").click(function() {
     $.ajax({
            type: "POST",
-           url: url,
+           url: "/login",
            data: $("#login_form").serialize(),
-           success: function(success) {
+           complete: function(success) {
+               console.log(success);
                if (success) {
-            	   $("#login_success").show();
-            	   $("#login_success").fadeOut(5000);
+                   $("#login_success").show();
+                   $("#login_success").fadeOut(5000);
                } else {
-            	   $("#login_fail").show();
-            	   $("#login_fail").fadeOut(5000);
+                   $("#login_fail").show();
+                   $("#login_fail").fadeOut(5000);
                }
            },
     });

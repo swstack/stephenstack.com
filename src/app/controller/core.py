@@ -91,4 +91,6 @@ class ApplicationCore(object):
         })
 
     def login(self, username, password):
-        self.login_manager.login(username, password)
+        if self.login_manager.login(username, password):
+            return True
+        return False

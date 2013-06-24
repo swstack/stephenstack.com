@@ -21,7 +21,7 @@ def static(filepath):
 @post("/login")
 def login():
     params = request.params
-    appcore.login(params["username"], params["password"])
+    return appcore.login(params["username"], params["password"])
 
 
 @route("/")
