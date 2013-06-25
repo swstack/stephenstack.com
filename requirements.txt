@@ -11,6 +11,9 @@ Website
 
 -as a user, if the login icon is going to be in a weird place, like the bottom link in my navbar, let's add a non-intrusive persistent alert to tell them to login.
 
+- as a user, i should have to log in to contact me, biatch!
+
+
 Android App
 -------------
 - as a user, i'd like to be able to have a one click andriod application to notify stephenstack.com about something.

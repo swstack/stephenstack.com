@@ -6,16 +6,59 @@ css shorthand padding:
                                ll=left
 */
 
+.__removeall__ {
+	background: #FFF;
+	border: none;
+	color: #000;
+	display: block;
+	font: normal;
+	height: auto;
+	letter-spacing: normal;
+	line-height: normal;
+	margin: 0;
+	padding: 0;
+	text-transform: normal;
+	visibility: visible;
+	width: auto;
+	word-spacing: normal;
+	z-index: auto;
+}
+
 /* General */
-.customtab {
-	font-size: 250%;
+#site_begin {
+	background: #7f8c8d;
+    font-size: 500%;
+	margin: -100px 0 100px 0;
+}
+
+#site_end {
+	background: #A52A2A;
+    font-size: 500%;
+	margin: 0 0 -30px 0;
+}
+
+table {
+	margin-top: -50%;
 }
 
 body {
     background: #A52A2A;
 }
 
-.section {
+
+#sidebar {
+    background-color: #080808 ;
+    height: 120%;
+    padding: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 50px;
+    z-index: 2;
+}
+
+
+.section section:not(#section5) {
     background-attachment: scroll;
     background-position: center top;
     margin-left: -50px;
@@ -73,7 +116,7 @@ body {
 	background: #DCDCDC;
 }
 
-#section2 .read-more a, #section4 .read-more a:hover {
+#section2 .read-more a, #section4 .read-mor e a:hover {
     color: #151515;
 }
 
@@ -115,7 +158,7 @@ body {
     color:#ecf0f1;
 }
 
-#section2 ul.article-tags i {
+#section2 ul.article-tags i { 
     left: 15px;
     font-size: 16px; font-size: 1.6rem;
     position: absolute;
@@ -209,15 +252,6 @@ body {
 /* Section 5 */
 #section5 {
     background: #A52A2A;
-    padding-left: 100px;
-}
-
-#section5  h1 {
-	color: #F1F1F1;
-    font-size: 50px; font-size: 8.5rem;
-    font-weight: 500;
-    letter-spacing: -2px;
-    line-height: 85px;
-    margin-left: -5px;
-    padding-bottom: 100px;
+    margin: 0 0 20% 0;
+    color: #FFFFFF;
 }

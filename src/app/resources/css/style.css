@@ -62,18 +62,6 @@ a:hover {
 	display: block;
 }
 
-#sidebar {
-	background-color: #16a085;
-    height: 120%;
-    padding: 0;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 50px;
-    z-index: 2;
-}
-
-
 #nav {
 	margin-top: 80px;
 }

@@ -49,9 +49,14 @@
 
 <!-- Section 1 -->
 				<section class="section" id="section1" data-section="1">
+				    <div class="span12">
+					    <div class="__removeall__">
+					        <h1 id="site_begin">$(stephenstack.com).begin(</h1>
+					    </div>
+					</div>
 					<div class="container-fluid">	
 						<div class="row-fluid">
-							<div class="span6 intro">
+							<div class="span8 intro">
 								<hgroup>
 									<h1>Welcome</h1>
 									<h3>This is where I play on the web.</h3>
@@ -338,32 +343,71 @@
 <!-- Section 5 -->
 				<section class="section" id="section5" data-section="5">
 					<div class="container-fluid">
-	                    <div class="row-fluid title">
-						    <div class="row center">
-							    <div class="span6">
-							        <h1>Login</h1>
-							        <form id="login_form">
-							            <input type="text" name="username" placeholder="username">
-							            <input type="password" name="password" placeholder="password">
-							            <label for="checkbox">Remember me</label>
-							            <input type="checkbox" name="checkbox">
-							            <input id="login_input" type="submit" value="login">
-							        </form>
-							    </div>
-							    <div class="span6">
-							        <h1>Create Account</h1>
-							    </div>
-							</div>
-							<div id="login_success" class="alert alert-success hide">
-							    <button type="button" class="close" data-dismiss="alert">&times;</button>
-							    <h4>Welcome back</h4>
-							</div>
-							<div id="login_fail" class="alert alert-error hide">
-							    <button type="button" class="close" data-dismiss="alert">&times;</button>
-							    <h4>Username already taken</h4>
+	                    <div class="row-fluid">
+	                       <div class="span5">
+	                           <table class="table table-striped table-bordered table-condensed" cellpadding="30">
+								    <tr>
+								        <th>
+								            <h2>Login</h2>
+								        </th>
+								    </tr>
+								    <tr>
+								        <td>
+								            <label for="username" >Username:</label>
+                                            <input class="span12" type="text" name="username" id="username">
+								        </td>
+								    </tr>
+								    <tr>
+                                        <td>
+                                            <label for="password" >Password:</label>
+                                            <input class="span12" type="text" name="password" id="password">
+                                        </td>
+                                    </tr>
+							   </table>
+						   </div>
+						   <div class="span2">   
+							   <h2>Or</h2>
+						   </div>
+						   <div class="span5">
+							   <table id="login" class="table table-striped table-bordered table-condensed">
+                                    <tr>
+                                        <th>
+                                            <h2>Create Account</h2>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="username" >Username:</label>
+                                            <input class="span12" type="text" name="username" id="username">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="password" >Password:</label>
+                                            <input class="span12" type="text" name="password" id="password">
+                                        </td>
+                                    </tr>
+                               </table>
+                            </div>
+
+
+                        	<div id="alerts">                   
+								<div id="login_success" class="alert alert-success hide">
+								    <button type="button" class="close" data-dismiss="alert">&times;</button>
+								    <h4>Welcome back</h4>
+								</div>
+								<div id="login_fail" class="alert alert-error hide">
+								    <button type="button" class="close" data-dismiss="alert">&times;</button>
+								    <h4>Username already taken</h4>
+								</div>
 							</div>
 					   </div>
 				    </div>
+				    <div class="span12">
+                        <div class="__removeall__">
+                            <h1 id="site_end">return "home");</h1>
+                        </div>
+                    </div>
 			    </section>
 <!-- End Section 5 -->
 
