@@ -25,7 +25,7 @@ $(document).ready(function ($) {
 	    section.siblings(".slide").slideToggle('2000', "easeInQuart");
 	});
 	
-	$('#section4 .article-tags li').on('click', function () {
+	$('#section2 .article-tags li').on('click', function () {
 	    
 	    var section = $(this).parents('.span4');
 	    var category = $(this).attr('data-blog');
@@ -152,11 +152,23 @@ $(document).ready(function ($) {
 	        return $(this).attr('src').replace('.svg', '.png');
 	    });
 	}    
-	    
-    
 
-    
-    
-
-
+	$("#login_input").click(function() {
+	    $.ajax({
+	           type: "POST",
+	           url: "/login",
+	           data: $("#login_form").serialize(),
+	           complete: function(success) {
+	               console.log(success);
+	               if (success) {
+	                   $("#login_success").show();
+	                   $("#login_success").fadeOut(5000);
+	               } else {
+	                   $("#login_fail").show();
+	                   $("#login_fail").fadeOut(5000);
+	               }
+	           },
+	    });
+	    return false;
+	});
 });
