@@ -176,4 +176,30 @@ $(document).ready(function ($) {
 		$("html, body").animate({ scrollTop: 0 }, "slow");
 		return false;
 	});
+	
+	jQuery(document).ready(function( $ ) {
+		// Triggering only when it is inside viewport
+		jQuery('.knob-4').waypoint(function(){         		        		        
+			// Triggering now
+	        jQuery('.knob-4').knob();     
+	        // Animating the value
+	        if(jQuery('.knob-4').val() == 0) {	
+		    	jQuery({value: 0}).animate({value: jQuery('.knob-4').attr("rel")}, {
+		        	duration: 5000,
+		        	easing:'swing',
+		        	step: function() 
+			        	{
+				            jQuery('.knob-4').val(Math.ceil(this.value)).trigger('change');
+				        }
+			    	})
+		   	}	        	   	        
+   	        }
+	        ,{
+	          triggerOnce: true,
+	          offset: function(){
+	            return $(window).height() - $(this).outerHeight(); 
+	          }
+	        }
+        );    
+	});
 });

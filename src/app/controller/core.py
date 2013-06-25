@@ -85,10 +85,7 @@ class ApplicationCore(object):
         return self._static_root
 
     def get_index(self):
-        return self.template_builder.get_index({
-                        "users": self.login_manager.get_users(),
-                        "resume": self.resume_builder.get_resume(),
-        })
+        return self.template_builder.get_index({})
 
     def login(self, username, password):
         if self.login_manager.login(username, password):
