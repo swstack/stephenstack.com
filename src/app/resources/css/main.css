@@ -43,7 +43,7 @@ css shorthand:
 
 #login_content {
 	margin-top: -30%;
-	margin-bottom: 30%;
+	margin-bottom: 20%;
 }
 
 body {
@@ -89,6 +89,7 @@ body {
 
 #section1 .intro {
     margin: 130px 0;
+    padding-top: 5%;
 }
 
 #section1 .thumb {
@@ -111,7 +112,6 @@ body {
     line-height: 28px;
     margin: 0px;
     width: 80%;
-
 }
 
 
@@ -119,6 +119,8 @@ body {
 
 #section2 {
 	background: #DCDCDC;
+	padding-top: 10%;
+    padding-bottom: 10%;
 }
 
 #section2 .read-more a, #section4 .read-mor e a:hover {
@@ -184,6 +186,8 @@ body {
 	background: #2F4F4F;
     background-image:url(../img/project-bg.jpg);
     color: #F1F1F1;
+    padding-top: 15%;
+    padding-bottom: 15%;
 }
 
 #section3 h2 {
@@ -203,7 +207,8 @@ body {
 	background: #1E90FF;
     margin-bottom: 20%;
     color: #F1F1F1;
-    padding-bottom: 0px;
+    padding-top: 15%;
+    padding-bottom: 5%;
 }
 
 #section4 h4.intro {
