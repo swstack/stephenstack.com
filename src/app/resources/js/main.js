@@ -171,4 +171,9 @@ $(document).ready(function ($) {
 	    });
 	    return false;
 	});
+	
+	$("#site_end").click(function() {
+		$("html, body").animate({ scrollTop: 0 }, "slow");
+		return false;
+	});
 });

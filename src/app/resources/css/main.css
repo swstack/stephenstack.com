@@ -1,5 +1,5 @@
 /*
-css shorthand padding:
+css shorthand:
     padding: xx yy zz ll       xx=top
                                yy=right
                                zz=bottom
@@ -28,17 +28,22 @@ css shorthand padding:
 #site_begin {
 	background: #7f8c8d;
     font-size: 500%;
-	margin: -100px 0 100px 0;
+	color: #080808;
+	padding-left: 5%;
+	margin-top: -5%;
 }
 
 #site_end {
+	color: #080808;
 	background: #A52A2A;
     font-size: 500%;
-	margin: 0 0 -30px 0;
+    padding-left: 5%;
+    margin-bottom: -5%;
 }
 
-table {
-	margin-top: -50%;
+#login_content {
+	margin-top: -30%;
+	margin-bottom: 30%;
 }
 
 body {
@@ -58,7 +63,7 @@ body {
 }
 
 
-.section section:not(#section5) {
+.section {
     background-attachment: scroll;
     background-position: center top;
     margin-left: -50px;
@@ -252,6 +257,5 @@ body {
 /* Section 5 */
 #section5 {
     background: #A52A2A;
-    margin: 0 0 20% 0;
     color: #FFFFFF;
 }
