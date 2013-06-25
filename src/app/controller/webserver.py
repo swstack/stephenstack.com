@@ -1,5 +1,5 @@
 from bottle import route, static_file, get, request, post, run
-
+import json
 
 HOST = "localhost"
 PORT = 8080
@@ -21,7 +21,8 @@ def static(filepath):
 @post("/login")
 def login():
     params = request.params
-    return appcore.login(params["username"], params["password"])
+    result = appcore.login(params["username"], params["password"])
+    return json.dumps({"result": result})
 
 
 @route("/")
