@@ -1,10 +1,234 @@
+/*
+css shorthand padding:
+    padding: xx yy zz ll       xx=top
+                               yy=right
+                               zz=bottom
+                               ll=left
+*/
+
+/* General */
 .customtab {
 	font-size: 250%;
 }
 
 body {
-	background-color: #E0E0E0;
+    background:#1abc9c;
 }
 
-.center {
+.section {
+    background-attachment: scroll;
+    background-position: center top;
+    margin-left: -50px;
+    position: relative;
+    padding: 150px 0 170px;
+    height:auto;
+}
+
+/* Section 1 */ 
+
+#section1 {
+	background:#7f8c8d;
+	
+    -webkit-background-size: 100% auto;
+    -moz-background-size: 100% auto;
+    -o-background-size: 100% auto;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+}
+
+#title_stephenstack.com h1{
+    color: "black";
+    font-size: 250%;
+}
+
+#section1 .intro {
+    margin: 130px 0;
+}
+
+#section1 .thumb {
+    display: none;
+}
+
+#section1 .intro h1 {
+    color: #F1F1F1;
+    font-size: 85px; font-size: 8.5rem;
+    font-weight: 500;
+    letter-spacing: -2px;
+    line-height: 85px;
+    margin-left: -5px;
+}
+
+#section1 .intro h3 {
+    color: #F1F1F1;
+    font-size: 26px; font-size: 2.6rem;
+    font-weight: 100;
+    line-height: 28px;
+    margin: 0px;
+    width: 80%;
+
+}
+
+/* Section 2 */ 
+
+#section2{
+	background: #DCDCDC;
+}
+
+#section2 h6 {
+    padding:15px;
+}
+.toolbox-header {
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: -5px;
+}
+
+.toolbox-item {
+    height: 20px;
+}
+
+.skill {
+    text-align: center;
+}
+
+/* Section 3 */ 
+
+#section3 {
+	background: #00BFFF;
+    background-image:url(../img/project-bg.jpg);
+    color: #F1F1F1;
+}
+
+#section3 h2 {
+    margin-left: -5px;
+}
+
+
+#section3 .content img {
+    max-width: 96%;
+    padding: 2%;
+    background-color: #F1F1F1;
+}
+
+
+
+
+/* Section 4 */
+
+#section4  h2 {
+	background: #DDA0DD;
+	
+    margin-left: -4px;
+}
+
+#section4 .read-more a, #section4 .read-more a:hover {
+    color: #151515;
+}
+
+#section4 .content .span4, #section4 .content .span6 {
+    padding-right: 20px;
+}
+
+#section4 .content {
+    min-height: 300px;
+}
+
+#section4 .content .span8 {
+    display: none;
+}
+
+#section4 .content .span8.current {
+    display: block;
+}
+
+#section4 ul.article-tags {
+    border-top: 1px solid #151515;
+    margin: 40px 0 0;
+}
+
+#section4 ul.article-tags li {
+    border-bottom: 1px solid #151515;
+    cursor: pointer;
+    display: block;
+    font-size: 17px; font-size: 1.7rem;
+    height: 36px;
+    line-height: 36px;
+    overflow: hidden;
+    padding-left: 45px;
+    position: relative;
+}
+
+#section4 ul.article-tags li:hover, #section4 ul.article-tags li.current {
+    background-color: #1abc9c;
+    color:#ecf0f1;
+}
+
+#section4 ul.article-tags i {
+    left: 15px;
+    font-size: 16px; font-size: 1.6rem;
+    position: absolute;
+    top: 10px;
+}
+
+#section4 h4 {
+    border-bottom: 1px solid #151515;
+    height: 35px;
+    margin-bottom: 18px;
+}
+
+
+/* Section 5 */
+
+#section5 {
+	background:#1abc9c;
+    margin-bottom: 20%;
+    color: #F1F1F1;
+    padding-bottom: 0px;
+}
+
+#section5 h4.intro {
+    border-bottom: 1px solid #F1F1F1;
+    height: 35px;
+    margin-bottom: 18px;
+}
+
+#section5 .content {
+    position: relative;
+}
+
+#section5 .content .alt {
+    margin-top: 20px;
+}
+
+#section5 .content .alt h4 {
+    line-height: 24px;
+    margin: 0;
+    padding-right: 20px;
+}
+
+#section5 .content .alt h4, #section6 .content .alt span {
+    display: inline-block;
+}
+
+#section5 .content .alt h5 {
+    display: inline;
+    line-height: 20px;
+    margin: 0;
+    padding-right: 10px;
+}
+
+#section5 .content .span4 {
+    padding-right: 25px;
+}
+
+#section5 .btn-default {
+    margin-top: 15px;
+}
+
+#section5 #footer {
+    margin: 200px 0 40px;
+}
+
+#section5 #footer p {
+    font-size: 14px; font-size: 1.4rem;
 }
