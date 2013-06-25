@@ -1,0 +1,17 @@
+Website
+------------
+
+- as me, i'd like to be able to upload my resume to my site, and this resume will be the one downloadable by users
+
+- as a user, i'd like to know when the resume was last uploaded.
+
+- as a user, be able to log in to my website, and have it remember me when i return
+
+- as a user, i'd like my password encrypted
+
+-as a user, if the login icon is going to be in a weird place, like the bottom link in my navbar, let's add a non-intrusive persistent alert to tell them to login.
+
+Android App
+-------------
+- as a user, i'd like to be able to have a one click andriod application to notify stephenstack.com about something.
+
