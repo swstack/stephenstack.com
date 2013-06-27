@@ -4,7 +4,7 @@ session.query(MyClass).\
 """
 
 from contextlib import contextmanager
-from model.model import User
+from app.model.model import User
 
 
 class LoginManager(object):

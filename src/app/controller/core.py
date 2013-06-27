@@ -54,7 +54,7 @@ class ApplicationCore(object):
         self.resource_manager = ResourceManager()
         self.template_builder = TemplateBuilder(self.resource_manager)
         self.resume_builder = ResumeBuilder(self.resource_manager)
-        self.database = Database()
+        self.database = Database(self.resource_manager)
         self.login_manager = LoginManager(self.database)
 
         #================================================================================
