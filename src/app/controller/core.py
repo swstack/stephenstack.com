@@ -19,25 +19,16 @@ class ApplicationCore(object):
     """Main component aggregator and Business logic"""
 
     def __init__(self):
-        #============================================================================
-        # Main Components
-        #============================================================================
         self.resource_manager = None
         self.logging_configurator = None
         self.database = None
         self.resume_builder = None
         self.template_builder = None
-
-        #============================================================================
-        # Internals
-        #============================================================================
         self._static_root = None
 
-    def _start_component(self, component_name, component):
-        logger.info("Starting %s...", component_name)
-        component.start()
-        logger.info("...%s complete.", component_name)
-
+    #================================================================================
+    # Main start method, every component in the system should have one
+    #================================================================================
     def start(self):
         """Start the app"""
         #============================================================================
@@ -49,7 +40,7 @@ class ApplicationCore(object):
         logging_configurator.start()
 
         #================================================================================
-        # Init all Componentscomponents
+        # Init all Components
         #================================================================================
         self.resource_manager = ResourceManager()
         self.template_builder = TemplateBuilder(self.resource_manager)
@@ -77,6 +68,17 @@ class ApplicationCore(object):
             print "Interrupt received... shutting down"
             os._exit(0)
 
+    #================================================================================
+    # Private
+    #================================================================================
+    def _start_component(self, component_name, component):
+        logger.info("Starting %s...", component_name)
+        component.start()
+        logger.info("...%s complete.", component_name)
+
+    #================================================================================
+    # Public
+    #================================================================================
     def get_static_root(self):
         """Return path to the static root for the http webserver, caching the
         value to reduce cpu cycles"""
