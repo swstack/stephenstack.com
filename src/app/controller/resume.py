@@ -1,4 +1,5 @@
 from BeautifulSoup import BeautifulSoup
+from StringIO import StringIO
 
 
 class ResumeBuilder(object):
@@ -11,12 +12,47 @@ class ResumeBuilder(object):
         # Will hold the HTML formatted resume
         self._resume = None
 
+    #================================================================================
+    # Start
+    #================================================================================
     def start(self):
         pass
 
+    #================================================================================
+    # Private
+    #================================================================================
+    def _insert_divs(self, resume):
+        section_ids_reversed = ["hobbies",
+                                "experience",
+                                "education",
+                                "technical_skills",
+                                "objective"]
+        resume = StringIO(resume)
+        h1s_encountered = 0
+        final = "<div id='entire_resume'>"
+        for line in resume.readlines():
+            for word in line.split(" "):
+                if word == "<h1" and section_ids_reversed != []:
+                    if h1s_encountered == 0:
+                        final += "<div id='%s'>" % section_ids_reversed.pop()
+                        final += word + " "
+                    else:
+                        final += "</div"
+                        final += "<div id='%s'>" % section_ids_reversed.pop()
+                        final += word + " "
+                    h1s_encountered += 1
+                else:
+                    final += word + " "
+        final += "</div></div>"
+        return final
+
+    #================================================================================
+    # Public
+    #===============================================================================
     def get_resume(self):
         if not self._resume:
             raw = open(self._html_path).read()
             soup = BeautifulSoup(raw)
-            self._resume = soup.prettify()
+            soup_resume = soup.prettify()
+            self._resume = self._insert_divs(soup_resume)
         return self._resume
