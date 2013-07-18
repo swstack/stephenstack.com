@@ -1,23 +1,48 @@
-<div class="row center">
-    <div class="span6">
-        <h3>Login</h3>
-        <form id="login_form">
-		    <input type="text" name="username" placeholder="username">
-		    <input type="password" name="password" placeholder="password">
-	        <label for="checkbox">Remember me</label>
-	        <input type="checkbox" name="checkbox">
-		    <input id="login_input" type="submit" value="login">
-		</form>
-    </div>
-    <div class="span6">
-        <h3>Create Account</h3>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12" id="login_content">
+            <div class="span5" id="login">
+                <form>
+                    <h2>Login</h2>
+                    <label for="username">Username:</label> <input class="span12"
+                        type="text" name="username" id="username"> <label
+                        for="password">Password:</label> <input class="span12"
+                        type="text" name="password" id="password">
+                    <button id="on_login" type="submit"
+                        class="btn-inverse pull-right">
+                        Login</span> <i class="icon-circle-arrow-right"></i>
+                    </button>
+                </form>
+
+            </div>
+
+            <div class="span2">
+                <h2>Or</h2>
+            </div>
+
+            <div class="span5" id="create_account">
+                <h2>Create Account</h2>
+                <label for="username">Username:</label> <input class="span12"
+                    type="text" name="username" id="username"> <label
+                    for="password">Password:</label> <input class="span12"
+                    type="text" name="password" id="password">
+            </div>
+        </div>
+
+        <div id="alerts">
+            <div id="login_success" class="alert alert-success hide">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Welcome back</h4>
+            </div>
+            <div id="login_fail" class="alert alert-error hide">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Username already taken</h4>
+            </div>
+        </div>
     </div>
 </div>
-<div id="login_success" class="alert alert-success hide">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4>Welcome back</h4>
-</div>
-<div id="login_fail" class="alert alert-error hide">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4>Username already taken</h4>
+<div class="row-fluid">
+    <div class="span12">
+        <h1 id="site_end">return);</h1>
+    </div>
 </div>
