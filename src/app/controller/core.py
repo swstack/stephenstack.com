@@ -86,11 +86,10 @@ class ApplicationCore(object):
             self._static_root = self.resource_manager.get_fs_resource_root()
         return self._static_root
 
-    def get_index(self):
-        return self.template_builder.get_index({
-                                "resume": self.resume_builder.get_resume(),
-                                "CLIENT_ID": self.login_manager.get_client_id(),
-        })
+    def get_index(self, **template_vars):
+        template_vars.update(resume=self.resume_builder.get_resume())
+        template_vars.update(CLIENT_ID=self.login_manager.get_client_id())
+        return self.template_builder.get_index(template_vars)
 
     def login(self, username, password):
         if self.login_manager.login(username, password):

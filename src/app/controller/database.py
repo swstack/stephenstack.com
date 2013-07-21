@@ -18,8 +18,8 @@ class Database(object):
         return self.session()
 
     def start(self):
-        db_dir_path = self.resource_manager.get_fs_resource_path("db")
-        self.db_string = "sqlite:///%s/store.db" % db_dir_path
+        db_dir_path = self.resource_manager.get_fs_resource_path("store")
+        self.db_string = "sqlite:///%s/app.db" % db_dir_path
         self.engine = create_engine(self.db_string)
         self.session = scoped_session(sessionmaker(bind=self.engine,
                                                    autocommit=False,

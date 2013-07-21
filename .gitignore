@@ -33,6 +33,7 @@ tmp/
 *.db
 .env/
 env/
+src/app/resources/store/
 
 # Sphinx Ignores
 docs/Makefile
