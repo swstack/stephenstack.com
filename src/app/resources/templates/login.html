@@ -1,43 +1,17 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12" id="login_content">
-            <div class="span5" id="login">
-                <form>
-                    <h2>Login</h2>
-                    <label for="username">Username:</label> <input class="span12"
-                        type="text" name="username" id="username"> <label
-                        for="password">Password:</label> <input class="span12"
-                        type="text" name="password" id="password">
-                    <button id="on_login" type="submit"
-                        class="btn-inverse pull-right">
-                        Login</span> <i class="icon-circle-arrow-right"></i>
-                    </button>
-                </form>
-
-            </div>
-
-            <div class="span2">
-                <h2>Or</h2>
-            </div>
-
-            <div class="span5" id="create_account">
-                <h2>Create Account</h2>
-                <label for="username">Username:</label> <input class="span12"
-                    type="text" name="username" id="username"> <label
-                    for="password">Password:</label> <input class="span12"
-                    type="text" name="password" id="password">
-            </div>
-        </div>
-
-        <div id="alerts">
-            <div id="login_success" class="alert alert-success hide">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h4>Welcome back</h4>
-            </div>
-            <div id="login_fail" class="alert alert-error hide">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h4>Username already taken</h4>
-            </div>
+            <div id="gConnect">
+			    <button class="g-signin"
+			        data-scope="https://www.googleapis.com/auth/plus.login"
+			        data-requestvisibleactions="http://schemas.google.com/AddActivity"
+			        data-clientId="{{ CLIENT_ID }}"
+			        data-accesstype="offline"
+			        data-callback="onSignInCallback"
+			        data-theme="dark"
+			        data-cookiepolicy="single_host_origin">
+			    </button>
+	        </div>
         </div>
     </div>
 </div>

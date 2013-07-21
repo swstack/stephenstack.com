@@ -1,12 +1,11 @@
 from app.controller.database import Database
 from app.controller.login import LoginManager
 from app.controller.resume import ResumeBuilder
-from app.controller.webserver import start as start_webserver
+from app.controller.webserver import Webserver
 from app.util.logging_configurator import LoggingConfigurator
 from app.util.resource_manager import ResourceManager
 from app.view.templates import TemplateBuilder
 from logging import getLogger
-from threading import Thread
 import os
 import time
 
@@ -47,6 +46,7 @@ class ApplicationCore(object):
         self.resume_builder = ResumeBuilder(self.resource_manager)
         self.database = Database(self.resource_manager)
         self.login_manager = LoginManager(self.database)
+        self.webserver = Webserver(self, self.resource_manager)
 
         #================================================================================
         # Start all Components
@@ -59,7 +59,7 @@ class ApplicationCore(object):
 
         self._start_component("Database", self.database)
 
-        self._start_component("Webserver", Thread(target=start_webserver, args=(self, )))
+        self._start_component("Webserver", self.webserver)
 
         try:
             while True:
