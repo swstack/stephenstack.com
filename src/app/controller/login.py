@@ -3,16 +3,28 @@ session.query(MyClass).\
     filter(MyClass.name == 'some name', MyClass.id > 5)
 """
 
-from contextlib import contextmanager
 from app.model.model import User
+from contextlib import contextmanager
+import json
 
 
 class LoginManager(object):
-    def __init__(self, database):
+    def __init__(self, database, resource_manager):
+        self._resource_manager = resource_manager
         self.database = database
+        self._client_secrets = None
+
+    def _load_client_secrets(self):
+        if not self._client_secrets:
+            raw = open(self._resource_manager.\
+                       get_fs_resource_path("client_secrets.json"), "r").read()
+            self._client_secrets = json.loads(raw)
 
     def start(self):
-        pass
+        self._load_client_secrets()
+
+    def get_client_id(self):
+        return self._client_secrets["web"]["client_id"]
 
     @property
     @contextmanager

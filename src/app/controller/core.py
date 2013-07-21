@@ -45,7 +45,7 @@ class ApplicationCore(object):
         self.template_builder = TemplateBuilder(self.resource_manager)
         self.resume_builder = ResumeBuilder(self.resource_manager)
         self.database = Database(self.resource_manager)
-        self.login_manager = LoginManager(self.database)
+        self.login_manager = LoginManager(self.database, self.resource_manager)
         self.webserver = Webserver(self, self.resource_manager)
 
         #================================================================================
@@ -88,7 +88,8 @@ class ApplicationCore(object):
 
     def get_index(self):
         return self.template_builder.get_index({
-                                "resume": self.resume_builder.get_resume()
+                                "resume": self.resume_builder.get_resume(),
+                                "CLIENT_ID": self.login_manager.get_client_id(),
         })
 
     def login(self, username, password):
