@@ -34,11 +34,11 @@ class ResumeBuilder(object):
             for word in line.split(" "):
                 if word == "<h1" and section_ids_reversed != []:
                     if h1s_encountered == 0:
-                        final += "<div id='%s'>" % section_ids_reversed.pop()
+                        final += "<div id='resume_section_%s'>" % section_ids_reversed.pop()
                         final += word + " "
                     else:
                         final += "</div"
-                        final += "<div id='%s'>" % section_ids_reversed.pop()
+                        final += "<div id='resume_section_%s' style='display: none;'>" % section_ids_reversed.pop()
                         final += word + " "
                     h1s_encountered += 1
                 else:

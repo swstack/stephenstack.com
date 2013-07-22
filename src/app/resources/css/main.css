@@ -115,7 +115,7 @@ body {
 }
 
 
-/* Section 2 */ 
+/* Section 2 | DIGITAL RESUME */ 
 
 #section2 {
 	background: #DCDCDC;
@@ -160,8 +160,13 @@ body {
     position: relative;
 }
 
-#section2 ul.article-tags li:hover, #section4 ul.article-tags li.current {
+#section2 ul.article-tags li:hover {
     background-color: #1abc9c;
+    color:#ecf0f1;
+}
+
+#section2 li.current {
+	background-color: #1abc9c;
     color:#ecf0f1;
 }
 
