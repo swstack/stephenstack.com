@@ -87,8 +87,8 @@ class ApplicationCore(object):
         return self._static_root
 
     def get_index(self, **template_vars):
-        template_vars.update(resume=self.resume_builder.get_resume())
-        template_vars.update(CLIENT_ID=self.login_manager.get_client_id())
+#        template_vars.update(resume=self.resume_builder.get_resume())
+        template_vars.update(CLIENT_ID=unicode(self.login_manager.get_client_id()))
         return self.template_builder.get_index(template_vars)
 
     def login(self, username, password):

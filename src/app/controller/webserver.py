@@ -167,4 +167,4 @@ def index():
     logger.info("Saving state key for session: %s", state)
     session['state'] = state
     session.save()
-    return appcore.get_index(STATE=state)
+    return appcore.get_index(STATE=unicode(state))

@@ -72,7 +72,7 @@ body {
 }
 
 
-/* Section 1 */ 
+/* Section 1 */
 #section1 {
 	background:#7f8c8d;
     -webkit-background-size: 100% auto;
@@ -85,6 +85,11 @@ body {
 #title_stephenstack.com h1{
     color: "black";
     font-size: 250%;
+}
+
+.center img {
+	margin-left: auto;
+    margin-right: auto;
 }
 
 #section1 .intro {
