@@ -50,6 +50,11 @@ body {
     background: #A52A2A;
 }
 
+.caro {
+	height: 400px;
+	width: 500px;
+}
+
 
 #sidebar {
     background-color: #080808 ;
