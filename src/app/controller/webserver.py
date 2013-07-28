@@ -117,8 +117,8 @@ def signin(state):
     return _json_response(me, 200)
 
 
-@bottle.post('/signout')
-def signout():
+@bottle.post('/logout')
+def logout():
     """Revoke current user's token and reset their session."""
     session = bottle.request.environ.get('beaker.session')
 

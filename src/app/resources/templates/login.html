@@ -3,7 +3,7 @@
         <div class="span12" id="login_content">
             <div id="gSignInWrapper">
 			    <h2>Login with, </h2>
-			    <div id="customBtn" class="customGPlusSignIn">
+			    <div id="signinBtn" class="gplusButton">
 			        <span class="icon"></span>
 			        <span class="buttonText">Google</span>
 			    </div>
@@ -11,6 +11,10 @@
 	        <div id="profile" style="display:none">
 		        <h2 id="welcome_back">Welcome back, </h2>
 		        <div id="user_profile_pic"></div>
+		        <div id="logoutBtn" class="gplusButton">
+                    <span class="icon"></span>
+                    <span class="buttonText">Logout</span>
+                </div>
 			</div>
         </div>
     </div>
@@ -57,4 +61,22 @@
 				$('<p><img src=\"' + userData.image.url + '\"></p>')
 		);
 	}
+	
+	$("#logoutBtn").click(function(){
+		console.log("supppp");
+		$.ajax({
+			type : 'POST',
+            url : "/logout",
+            async : false,
+            success : function(result) {
+                console.log('revoke response: ' + result);
+                $('#profile').hide();
+                $('#profile').empty();
+                $('#gSignInWrapper').show();
+            },
+            error : function(e) {
+                console.log(e);
+            }
+        });
+	});
 </script>
