@@ -54,22 +54,17 @@ def static(filepath):
     return bottle.static_file(filepath, root=appcore.get_static_root())
 
 
-@bottle.post("/login")
-def login():
-    params = bottle.request.params
-    result = appcore.login(params["username"], params["password"])
-    return json.dumps({"result": result})
-
-
-@bottle.post("//connect")
-def connect():
+@bottle.post("/signin/<state>")
+def signin(state):
     """Exchange the one-time authorization code for a token and
     store the token in the session."""
+
+
     # Ensure that the request is not a forgery and that the user sending
     # this connect request is the expected user.
     session = bottle.request.environ.get('beaker.session')
 
-    state_request = bottle.request.params.get('state', 0)
+    state_request = state
     state_session = session.get("state", 1)
 
     if state_request != state_session:
@@ -102,19 +97,28 @@ def connect():
     # the other components validate the token before using it.
     gplus_id = credentials.id_token['sub']
 
-    stored_credentials = session.get('credentials')
-    stored_gplus_id = session.get('gplus_id')
-    if stored_credentials is not None and gplus_id == stored_gplus_id:
-        return _json_response("Current user already connected.", 200)
-
     # Store the access token in the session for later use.
     session['credentials'] = credentials
     session['gplus_id'] = gplus_id
-    return _json_response("Successfully connected user.", 200)
+
+    # get some data about the user
+    try:
+        # Create a new authorized API client.
+        http = httplib2.Http()
+        http = credentials.authorize(http)
+        # Get a list of people that this user has shared with this app.
+        my_circles = SERVICE.people().list(userId='me', collection='visible').execute(http=http)
+        me = SERVICE.people().get(userId="me").execute(http=http)
+    except AccessTokenRefreshError:
+        return _json_response('Failed to refresh access token.', 500)
+
+    bigger_img_url = me["image"]["url"].replace("sz=50", "sz=200")
+    me["image"]["url"] = bigger_img_url
+    return _json_response(me, 200)
 
 
-@bottle.post('/disconnect')
-def disconnect():
+@bottle.post('/signout')
+def signout():
     """Revoke current user's token and reset their session."""
     session = bottle.request.environ.get('beaker.session')
 
@@ -136,27 +140,6 @@ def disconnect():
     else:
         # For whatever reason, the given token was invalid.
         return _json_response("Failed to revoke token for given user.", 400)
-
-
-@bottle.get('//people')
-def people():
-    """Get list of people user has shared with this app."""
-    session = bottle.request.environ.get('beaker.session')
-
-    credentials = session.get('credentials')
-    # Only fetch a list of people for connected users.
-    if credentials is None:
-        return _json_response("Current user not connected.", 401)
-    try:
-        # Create a new authorized API client.
-        http = httplib2.Http()
-        http = credentials.authorize(http)
-        # Get a list of people that this user has shared with this app.
-        google_request = SERVICE.people().list(userId='me', collection='visible')
-        result = google_request.execute(http=http)
-        return _json_response(result, 200)
-    except AccessTokenRefreshError:
-        return _json_response('Failed to refresh access token.', 500)
 
 
 @bottle.get("/")

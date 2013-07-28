@@ -90,8 +90,3 @@ class ApplicationCore(object):
 #        template_vars.update(resume=self.resume_builder.get_resume())
         template_vars.update(CLIENT_ID=unicode(self.login_manager.get_client_id()))
         return self.template_builder.get_index(template_vars)
-
-    def login(self, username, password):
-        if self.login_manager.login(username, password):
-            return True
-        return False
