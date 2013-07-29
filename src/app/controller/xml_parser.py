@@ -1,3 +1,5 @@
+"""Unused as of 7/28/13 in this code base...kind of a science experiment"""
+
 from StringIO import StringIO
 
 

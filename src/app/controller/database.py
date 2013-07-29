@@ -11,12 +11,6 @@ class Database(object):
         self.session = None
         self.db_string = None
 
-    def create_db_if_needed(self):
-        Base.metadata.create_all(self.engine)
-
-    def get_session(self):
-        return self.session()
-
     def start(self):
         db_dir_path = self.resource_manager.get_fs_resource_path("store")
         self.db_string = "sqlite:///%s/app.db" % db_dir_path
@@ -24,4 +18,16 @@ class Database(object):
         self.session = scoped_session(sessionmaker(bind=self.engine,
                                                    autocommit=False,
                                                    autoflush=True))
-        self.create_db_if_needed()
+        self._create_db_if_needed()
+
+    #================================================================================
+    # Internal
+    #================================================================================
+    def _create_db_if_needed(self):
+        Base.metadata.create_all(self.engine)
+
+    #================================================================================
+    # Public
+    #================================================================================
+    def get_session(self):
+        return self.session()
