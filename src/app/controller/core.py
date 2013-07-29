@@ -1,6 +1,5 @@
 from app.controller.database import Database
 from app.controller.login import LoginManager
-from app.controller.resume import ResumeBuilder
 from app.controller.routes import Router
 from app.controller.server import Server
 from app.util.logging_configurator import LoggingConfigurator
@@ -41,21 +40,17 @@ class ApplicationCore(object):
         self.router = Router()
         self.resource_manager = ResourceManager()
         self.template_builder = TemplateBuilder(self.resource_manager)
-        self.resume_builder = ResumeBuilder(self.resource_manager)
         self.database = Database(self.resource_manager)
         self.login_manager = LoginManager(self.database, self.resource_manager)
         self.server = Server(self.resource_manager,
                              self.router,
                              self.template_builder,
-                             self.login_manager,
-                             self.resume_builder)
+                             self.login_manager)
 
         # Start all Components ------------------------------------------------------
         self._start_component("Template Builder", self.template_builder)
 
         self._start_component("Login Manager", self.login_manager)
-
-        self._start_component("Resume Builder", self.resume_builder)
 
         self._start_component("Database", self.database)
 

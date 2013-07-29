@@ -32,8 +32,7 @@ class Server(Thread):
     def __init__(self, resource_manager,
                        router,
                        template_builder,
-                       login_manager,
-                       resume_builder):
+                       login_manager):
         Thread.__init__(self)
 
         # Save dependencies ---------------------------------------------------------
@@ -41,7 +40,6 @@ class Server(Thread):
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
-        self._resume_builder = resume_builder
 
         # Register with the router --------------------------------------------------
         self._router.register_server(self)

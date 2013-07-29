@@ -34,7 +34,7 @@ def static(filepath):
 @bottle.post("/login/<state>")
 def login(state):
     if SERVER:
-        return SERVER.signin(state)
+        return SERVER.login(state)
 
 
 @bottle.post('/logout')
