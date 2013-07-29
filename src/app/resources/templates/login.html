@@ -45,7 +45,7 @@
 	function _signIn(auth_code) {
 		$.ajax({
 	        type : 'POST',
-	        url : '/signin/{{ STATE }}',
+	        url : '/login/{{ STATE }}',
 	        contentType : 'application/octet-stream; charset=utf-8',
 	        success : function(userData) {
 	        	console.log(userData);

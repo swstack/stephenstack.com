@@ -31,8 +31,8 @@ def static(filepath):
         return bottle.static_file(filepath, root=SERVER.get_static_root())
 
 
-@bottle.post("/signin/<state>")
-def signin(state):
+@bottle.post("/login/<state>")
+def login(state):
     if SERVER:
         return SERVER.signin(state)
 

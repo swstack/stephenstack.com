@@ -73,7 +73,7 @@ class Server(Thread):
             self._static_root = self._resource_manager.get_fs_resource_root()
         return self._static_root
 
-    def signin(self, state):
+    def login(self, state):
         """Exchange the one-time authorization code for a token and
         store the token in the session."""
         # Ensure that the request is not a forgery and that the user sending
@@ -115,7 +115,7 @@ class Server(Thread):
         session.save()
 
         template_vars = {
-#              "resume": self._resume_builder.get_resume(),
+              "resume": "",
               "STATE": unicode(state)
         }
         return self._template_builder.get_index(template_vars)

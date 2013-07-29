@@ -1,121 +1,123 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-<title>Stephen Stack</title>
-<meta name="description" content="">
-<meta name="author" content="">
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-<link href="/static/css/bootstrap.css" rel="stylesheet" media="screen">
-<link href="/static/css/bootstrap-responsive.css" rel="stylesheet"
-	media="screen">
-<link href="/static/css/font-awesome.css" rel="stylesheet">
-<link href="/static/css/style.css" rel="stylesheet" media="screen">
-<link href="/static/css/main.css" rel="stylesheet">
-
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/modernizr.js"></script>
-<script type="text/javascript">
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-42535217-1', 'stephenstack.com');
-  ga('send', 'pageview');
-
-</script>
-<script type="text/javascript">
-	(function() {
-	    var po = document.createElement('script');
-	    po.type = 'text/javascript'; po.async = true;
-	    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
-	    var s = document.getElementsByTagName('script')[0];
-	    s.parentNode.insertBefore(po, s);
-    })();
-	
-	function render() {
-	    gapi.signin.render('signinBtn', {
-		      'clientid': "799700368721.apps.googleusercontent.com",
-		      'cookiepolicy': 'single_host_origin',
-		      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-		      'scope': 'https://www.googleapis.com/auth/plus.login',
-		      'callback': "onSignInCallback",
-		      "accesstype": "offline",
-	    });
-	  }
-</script>
-</head>
-
-<body>
-	<div id="wrapper">
-	
-	    <!-- SIDEBAR -->
-		<div id="sidebar">
-			<a class="btn-navbar" data-toggle="collapse"
-				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-				class="icon-bar"></span> <span class="icon-bar"></span>
-			</a>
-			<!-- <div id="logo"> <a href="/"><img src="/static/img/logo.svg" alt="logo" /></a> </div> -->
-			<nav id="nav" class="navigation" role="navigation">
-				<ul class="unstyled">
-					<li class="active" data-section="1">
-					    <i class="icon-home"></i>
-						<span>Home</span>
-					</li>
-					<li data-section="2" class="">
-					    <i class="icon-user"></i>
-					    <span>Digital Resume</span>
-					</li>
-					<li data-section="3" class="">
-					    <i class="icon-laptop"></i>
-					    <span>Projects</span>
-					</li>
-					<li data-section="4" class="">
-					    <i class="icon-envelope"></i>
-					    <span>Contact</span>
-					</li>
-					<li data-section="5" class="last">
-					    <i class="icon-pencil"></i>
-						<span>Login</span>
-				    </li>
-				</ul>
-			</nav>
-		</div>
-
-        <!-- CONTENT -->
-		<div id="container">
-
-			<section class="section" id="section1" data-section="1">
-			    {% include "home.html" %}
-		    </section>
-
-			<section class="section" id="section2" data-section="2">
-			    {% include "digital_resume.html" %}
-			</section>
-
-			<section class="section" id="section3" data-section="3">
-			    {% include "projects.html" %}
-			</section>
-
-			<section class="section" id="section4" data-section="4">
-			    {% include "contact.html" %}
-			</section>
+	<head>
+		<title>Stephen Stack</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+		<link href="/static/css/bootstrap.css" rel="stylesheet" media="screen">
+		<link href="/static/css/bootstrap-responsive.css" rel="stylesheet"
+			media="screen">
+		<link href="/static/css/font-awesome.css" rel="stylesheet">
+		<link href="/static/css/style.css" rel="stylesheet" media="screen">
+		<link href="/static/css/main.css" rel="stylesheet">
 		
-			<section class="section" id="section5" data-section="5">
-		        {% include "login.html" %}
-			</section>
-
+		
+		<!-- JAVASCRIPTS -->
+		<script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.knob.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/static/js/main.js"></script>
+		<script type="text/javascript" src="/static/js/pdf.js"></script>
+		<script type="text/javascript" src="/static/js/compatibility.js"></script>
+		<script type="text/javascript" src="/static/js/modernizr.js"></script>
+		<script type="text/javascript">
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		  ga('create', 'UA-42535217-1', 'stephenstack.com');
+		  ga('send', 'pageview');
+		
+		</script>
+		<script type="text/javascript">
+			(function() {
+			    var po = document.createElement('script');
+			    po.type = 'text/javascript'; po.async = true;
+			    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
+			    var s = document.getElementsByTagName('script')[0];
+			    s.parentNode.insertBefore(po, s);
+		    })();
+			
+			function render() {
+			    gapi.signin.render('signinBtn', {
+				      'clientid': "799700368721.apps.googleusercontent.com",
+				      'cookiepolicy': 'single_host_origin',
+				      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
+				      'scope': 'https://www.googleapis.com/auth/plus.login',
+				      'callback': "onSignInCallback",
+				      "accesstype": "offline",
+			    });
+			  }
+		</script>
+	</head>
+	
+	<body>
+		<div id="wrapper">
+		
+		    <!-- SIDEBAR -->
+			<div id="sidebar">
+				<a class="btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a>
+				<!-- <div id="logo"> <a href="/"><img src="/static/img/logo.svg" alt="logo" /></a> </div> -->
+				<nav id="nav" class="navigation" role="navigation">
+					<ul class="unstyled">
+						<li class="active" data-section="1">
+						    <i class="icon-home"></i>
+							<span>Home</span>
+						</li>
+						<li data-section="2" class="">
+						    <i class="icon-user"></i>
+						    <span>Digital Resume</span>
+						</li>
+						<li data-section="3" class="">
+						    <i class="icon-laptop"></i>
+						    <span>Projects</span>
+						</li>
+						<li data-section="4" class="">
+						    <i class="icon-envelope"></i>
+						    <span>Contact</span>
+						</li>
+						<li data-section="5" class="last">
+						    <i class="icon-pencil"></i>
+							<span>Login</span>
+					    </li>
+					</ul>
+				</nav>
+			</div>
+	
+	        <!-- CONTENT -->
+			<div id="container">
+	
+				<section class="section" id="section1" data-section="1">
+				    {% include "home.html" %}
+			    </section>
+	
+				<section class="section" id="section2" data-section="2">
+				    {% include "digital_resume.html" %}
+				</section>
+	
+				<section class="section" id="section3" data-section="3">
+				    {% include "projects.html" %}
+				</section>
+	
+				<section class="section" id="section4" data-section="4">
+				    {% include "contact.html" %}
+				</section>
+			
+				<section class="section" id="section5" data-section="5">
+			        {% include "login.html" %}
+				</section>
+	
+			</div>
 		</div>
-	</div>
-
-	<!-- JAVASCRIPTS -->
-	<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
-	<script type="text/javascript" src="/static/js/jquery.knob.js"></script>
-	<script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/static/js/main.js"></script>
-</body>
+	</body>
 </html>
