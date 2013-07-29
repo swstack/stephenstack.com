@@ -1,9 +1,8 @@
 import os
 import pkg_resources
-from app.util.component import Component
 
 
-class ResourceManager(Component):
+class ResourceManager(object):
     """Provides paths for use by other components (abstraction layer)"""
 
     def __init__(self):

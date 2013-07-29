@@ -50,12 +50,6 @@ body {
     background: #A52A2A;
 }
 
-.caro {
-	height: 400px;
-	width: 600px;
-}
-
-
 #sidebar {
     background-color: #080808 ;
     height: 120%;
@@ -78,6 +72,14 @@ body {
 
 
 /* Section 1 */
+.caro {
+    height: 400px;
+    width: 600px;
+}
+
+#myCarousel {
+}
+
 #section1 {
 	background:#7f8c8d;
     -webkit-background-size: 100% auto;

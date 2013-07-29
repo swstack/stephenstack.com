@@ -18,6 +18,9 @@ logger = getLogger("core")
 class ApplicationCore(object):
     """Main component aggregator and Business logic"""
 
+    #================================================================================
+    # Construction
+    #================================================================================
     def __init__(self):
         self.resource_manager = None
         self.logging_configurator = None
@@ -26,9 +29,6 @@ class ApplicationCore(object):
         self.template_builder = None
         self.router = None
 
-    #================================================================================
-    # Main start method, every component in the system should have one
-    #================================================================================
     def start(self):
         """Start the app"""
         # Start the logger so we can begin logging ----------------------------------
