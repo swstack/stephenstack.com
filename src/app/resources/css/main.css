@@ -30,7 +30,8 @@ css shorthand:
     font-size: 500%;
 	color: #080808;
 	padding-left: 5%;
-	margin-top: -10%;
+	padding-top: -10%;
+    padding-bottom: 5%;
 }
 
 #login_content {
