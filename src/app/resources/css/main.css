@@ -30,7 +30,7 @@ css shorthand:
     font-size: 500%;
 	color: #080808;
 	padding-left: 5%;
-	margin-top: -5%;
+	margin-top: -10%;
 }
 
 #site_end {
@@ -73,15 +73,11 @@ body {
 
 /* Section 1 */
 .caro {
-    height: 400px;
-    width: 600px;
-}
-
-#myCarousel {
+	background-color: #7f8c8d;  
 }
 
 #section1 {
-	background:#7f8c8d;
+	background: #7f8c8d;
     -webkit-background-size: 100% auto;
     -moz-background-size: 100% auto;
     -o-background-size: 100% auto;
@@ -94,14 +90,7 @@ body {
     font-size: 250%;
 }
 
-.center img {
-	margin-left: auto;
-    margin-right: auto;
-}
-
 #section1 .intro {
-    margin: 130px 0;
-    padding-top: 5%;
 }
 
 #section1 .thumb {
