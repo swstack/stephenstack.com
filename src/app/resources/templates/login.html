@@ -28,7 +28,6 @@
 
 <script type="text/javascript">
 	function onSignInCallback(authResult) {
-		console.log("authResult: ", authResult);
 	    if (authResult['access_token']) {
 	    	// success, user signed in
 	    	_signIn(authResult.code);
@@ -48,7 +47,6 @@
 	        url : '/login/{{ STATE }}',
 	        contentType : 'application/octet-stream; charset=utf-8',
 	        success : function(userData) {
-	        	console.log(userData);
 	        	_renderProfile($.parseJSON(userData));
 	        },
 	        processData : false,
