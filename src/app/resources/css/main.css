@@ -33,14 +33,6 @@ css shorthand:
 	margin-top: -10%;
 }
 
-#site_end {
-	color: #080808;
-	background: #A52A2A;
-    font-size: 500%;
-    padding-left: 5%;
-    margin-bottom: -5%;
-}
-
 #login_content {
 	margin-top: -30%;
 	margin-bottom: 20%;
@@ -301,4 +293,15 @@ span.buttonText {
 #section5 {
     background: #A52A2A;
     color: #FFFFFF;
+}
+
+#site_end {
+    color: #080808;
+    background: #A52A2A;
+    font-size: 500%;
+    padding-left: 5%;
+}
+
+#login-table, td{
+	margin: auto;
 }

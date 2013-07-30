@@ -1,27 +1,38 @@
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12" id="login_content">
-            <div id="gSignInWrapper">
-			    <h2>Login with, </h2>
-			    <div id="signinBtn" class="gplusButton">
-			        <span class="icon"></span>
-			        <span class="buttonText">Google</span>
-			    </div>
-			</div>
-	        <div id="profile" style="display:none">
-		        <h2 id="welcome_back">Welcome back, </h2>
-		        <div id="user_profile_pic"></div>
-		        <div id="logoutBtn" class="gplusButton">
-                    <span class="icon"></span>
-                    <span class="buttonText">Logout</span>
-                </div>
-			</div>
+<div id="row-login" class="row">
+    <div class="col-lg-8 col-offset-3">
+        <h2>Login with, </h2>
+        <div id="signinBtn" class="gplusButton">
+            <span class="icon"></span>
+            <span class="buttonText">Google</span>
         </div>
     </div>
 </div>
 
-<div class="row-fluid">
-    <div class="span12">
+<div id="row-profile" class="row" style="display: none">
+    <table id="login-table">
+        <tr>
+            <td colspan="2">
+                <h2 id="welcome_back">Welcome back, </h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="profile">
+                    <div id="user_profile_pic"></div>
+                </div>
+            </td>
+            <td>
+                 <div id="logoutBtn" class="gplusButton">
+                    <span class="icon"></span>
+                    <span class="buttonText">Logout</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
         <h1 id="site_end">return);</h1>
     </div>
 </div>
@@ -31,13 +42,13 @@
 	    if (authResult['access_token']) {
 	    	// success, user signed in
 	    	_signIn(authResult.code);
-            $('#profile').show('slow');
-            $('#gSignInWrapper').hide();
+            $('#row-profile').show('slow');
+            $('#row-login').hide();
         } else if (authResult['error']) {
            // error, user not signed in
            console.log('There was an error: ' + authResult['error']);
-           $('#profile').hide('slow');
-           $('#gSignInWrapper').show();
+           $('#row-profile').hide('slow');
+           $('#row-login').show();
         }
 	}
 	
@@ -68,9 +79,9 @@
             async : false,
             success : function(result) {
                 console.log('revoke response: ' + result);
-                $('#profile').hide();
+                $('#row-profile').hide();
                 $('#profile').empty();
-                $('#gSignInWrapper').show();
+                $('#row-login').show();
             },
             error : function(e) {
                 console.log(e);
