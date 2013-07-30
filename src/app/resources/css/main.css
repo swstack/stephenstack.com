@@ -72,8 +72,8 @@ body {
 
 
 /* Section 1 */
-.caro {
-	background-color: #7f8c8d;  
+.carousel-control {
+	background-image: none !important;
 }
 
 #section1 {

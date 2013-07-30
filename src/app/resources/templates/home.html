@@ -22,35 +22,48 @@
             </button>
         </div>
         <div class="span6 intro center">
-            <div id="myCarousel" class="carousel">
+            <div id="my-carousel" class="carousel slide">
+                <ol class="carousel-indicators">
+                    <li data-target="#my-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#my-carousel" data-slide-to="1" class="active"></li>
+                    <li data-target="#my-carousel" data-slide-to="2" class="active"></li>
+                    <li data-target="#my-carousel" data-slide-to="3" class="active"></li>
+                    <li data-target="#my-carousel" data-slide-to="4" class="active"></li>
+                </ol>
 		        <div class="carousel-inner">
-		            <div class="caro item active">
+		            <div class="item active">
 		                <img src="/static/img/homepics/profile_picture.jpg" width="500" height="500">
 		            </div>
-		            <div class="caro item">
+		            <div class="item">
 		                <img src="/static/img/homepics/fish_w_dad.jpg" width="500" height="500">
 		            </div>
-		            <div class="caro item">
+		            <div class="item">
 		                <img src="/static/img/homepics/snowboarding.jpg" width="500" height="500">
 		            </div>
-		            <div class="caro item">
+		            <div class="item">
 		                <img src="/static/img/homepics/mexico_w_tone.jpg" width="500" height="500">
 		            </div>
-		            <div class="caro item">
+		            <div class="item">
 		                <img src="/static/img/homepics/snowboarding2.jpg" width="500" height="500">
 		            </div>
-		            <div class="caro item">
+		            <div class="item">
 		                <img src="/static/img/homepics/rakin.jpg" width="500" height="500">
 		            </div>
 			    </div>
 			    <!-- Carousel nav -->
-			    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&rsaquo;</a>
-			    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			    <a class="carousel-control left" href="#my-carousel" data-slide="prev">
+			        <span class="icon-prev"></span>
+			    </a>
+			    <a class="carousel-control right" href="#my-carousel" data-slide="next">
+			        <span class="icon-next"></span>
+			    </a>
 		    </div>
         </div>
     </div>
     <!-- /row-fluid -->
 </div>
 <script>
-$('.carousel').carousel();
+$('.carousel').carousel({
+	interval: 2000
+});
 </script>
