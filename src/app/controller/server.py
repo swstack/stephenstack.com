@@ -1,6 +1,6 @@
 from apiclient.discovery import build
-from beaker.middleware import SessionMiddleware
 from app.controller.login import AuthCodeException, AccessTokenException
+from beaker.middleware import SessionMiddleware
 from threading import Thread
 import bottle
 import json
@@ -23,53 +23,64 @@ def _json_response(body, status):
 
 
 class Server(Thread):
-    HOST = "0.0.0.0"
-    PORT = 8080
-
     #================================================================================
     # Construction
     #================================================================================
     def __init__(self, resource_manager,
-                       router,
                        template_builder,
-                       login_manager):
+                       login_manager,
+                       host="0.0.0.0",
+                       port=8080,
+                       session_options=None):
         Thread.__init__(self)
 
         # Save dependencies ---------------------------------------------------------
-        self._router = router
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
-
-        # Register with the router --------------------------------------------------
-        self._router.register_server(self)
+        self._host = host
+        self._port = port
+        self._session_options = session_options or \
+            {
+             'session.type': 'file',
+             'session.cookie_expires': 300,
+             'session.data_dir': self._resource_manager.get_fs_resource_path("store"),
+             'session.auto': True
+            }
 
         # Internal state ------------------------------------------------------------
         self._static_root = None
 
+        # Create and route WSGI Bottle application ----------------------------------
+        self._bottle_app = bottle.Bottle()
+        self._route_app(self._bottle_app)
+
     def run(self):
-        SESSION_OPTS = {
-            'session.type': 'file',
-            'session.cookie_expires': 300,
-            'session.data_dir': self._resource_manager.get_fs_resource_path("store"),
-            'session.auto': True
-            }
-        bottle.run(app=SessionMiddleware(bottle.app(), SESSION_OPTS),
-                   host=self.HOST,
-                   port=self.PORT,
-                   quiet=False)
+        bottle.run(
+            app=SessionMiddleware(self._bottle_app, self._session_options),
+            host=self._host,
+            port=self._port,
+        )
 
     #================================================================================
     # Internal
     #================================================================================
+    def _route_app(self, app):
+        app.route("/", method="GET", callback=self.index)
+        app.route('/static/<filepath:path>', method="GET", callback=self.static)
+        app.route("/login/<state>", method="POST", callback=self.login)
+        app.route("/logout", method="POST", callback=self.logout)
 
-    #================================================================================
-    # Public
-    #================================================================================
-    def get_static_root(self):
+    def _get_static_root(self):
         if not self._static_root:
             self._static_root = self._resource_manager.get_fs_resource_root()
         return self._static_root
+
+    #================================================================================
+    # Routes
+    #================================================================================
+    def static(self, filepath):
+        return bottle.static_file(filepath, root=self._get_static_root())
 
     def login(self, state):
         """Exchange the one-time authorization code for a token and
@@ -105,6 +116,7 @@ class Server(Thread):
         return _json_response("Successfully disconnected", 200)
 
     def index(self):
+        print "INDEX"
         session = bottle.request.environ.get('beaker.session')
         state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                             for x in xrange(32))

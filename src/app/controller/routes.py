@@ -25,13 +25,9 @@ class Router(object):
         SERVER = server
 
 
-@bottle.get('/static/<filepath:path>')
-def static(filepath):
-    if SERVER:
-        return bottle.static_file(filepath, root=SERVER.get_static_root())
 
 
-@bottle.post("/login/<state>")
+@bottle.post()
 def login(state):
     if SERVER:
         return SERVER.login(state)

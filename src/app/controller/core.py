@@ -26,7 +26,6 @@ class ApplicationCore(object):
         self.database = None
         self.resume_builder = None
         self.template_builder = None
-        self.router = None
 
     def start(self):
         """Start the app"""
@@ -37,13 +36,11 @@ class ApplicationCore(object):
         logging_configurator.start()
 
         # Init all Components -------------------------------------------------------
-        self.router = Router()
         self.resource_manager = ResourceManager()
         self.template_builder = TemplateBuilder(self.resource_manager)
         self.database = Database(self.resource_manager)
         self.login_manager = LoginManager(self.database, self.resource_manager)
         self.server = Server(self.resource_manager,
-                             self.router,
                              self.template_builder,
                              self.login_manager)
 
