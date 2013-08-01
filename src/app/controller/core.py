@@ -58,6 +58,7 @@ class ApplicationCore(object):
 
         # Main loop -----------------------------------------------------------------
         try:
+            print "Ctrl+C to quit..."
             while True:
                 time.sleep(10)
         except KeyboardInterrupt:
