@@ -3,11 +3,10 @@ from app.controller.login import AuthCodeException, AccessTokenException
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
-from threading import Thread
+import json
 import logging
 import random
 import string
-import json
 
 GAPI = build('plus', 'v1')
 
@@ -25,23 +24,17 @@ def _json_response(body, status):
                  )
 
 
-class Router(Thread):
+class Router(object):
     #================================================================================
     # Construction
     #================================================================================
     def __init__(self, resource_manager,
                        template_builder,
-                       login_manager,
-                       host="0.0.0.0",
-                       port=8080):
-        Thread.__init__(self)
-
+                       login_manager):
         # Dependencies --------------------------------------------------------------
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
-        self._host = host
-        self._port = port
 
         # Internal state ------------------------------------------------------------
         self._static_root = None
@@ -68,6 +61,14 @@ class Router(Thread):
         self._config.add_route("login", "/login")
         self._config.add_view(self.login,
                               route_name="login",
+                              request_method="POST",
+                              permission="read")
+        self._app = self._config.make_wsgi_app()
+
+        # Route: /login/<state> (:method:login)
+        self._config.add_route("logout", "/logout")
+        self._config.add_view(self.login,
+                              route_name="logout",
                               request_method="POST",
                               permission="read")
         self._app = self._config.make_wsgi_app()
