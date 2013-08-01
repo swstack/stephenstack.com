@@ -116,7 +116,6 @@ class Server(Thread):
         return _json_response("Successfully disconnected", 200)
 
     def index(self):
-        print "INDEX"
         session = bottle.request.environ.get('beaker.session')
         state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                             for x in xrange(32))

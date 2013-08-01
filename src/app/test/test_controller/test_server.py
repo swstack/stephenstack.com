@@ -9,9 +9,8 @@ import urllib2
 class TestServer(unittest.TestCase):
     def setUp(self):
         install_opener()
-        app = Server(Mock(), Mock(), Mock())
-        app.run()
-        add_wsgi_intercept("localhost", 8080, lambda: app._bottle_app)
+        app = Server(Mock(), Mock(), Mock())._bottle_app
+        add_wsgi_intercept("localhost", 8080, lambda: app)
 
     def tearDown(self):
         remove_wsgi_intercept("localhost", 8080)
