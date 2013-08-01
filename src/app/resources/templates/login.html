@@ -55,13 +55,17 @@
 	function _signIn(auth_code) {
 		$.ajax({
 	        type : 'POST',
-	        url : '/login/{{ STATE }}',
+	        url : '/login',
 	        contentType : 'application/octet-stream; charset=utf-8',
 	        success : function(userData) {
-	        	_renderProfile($.parseJSON(userData));
+	        	console.log(userData);
+	        	_renderProfile(userData);
 	        },
 	        processData : false,
-	        data : auth_code
+	        data : JSON.stringify({
+	        	   "auth_code": auth_code,
+	        	   "state": "{{ STATE }}",
+	        	   }),
 	    });
 	}
 	
