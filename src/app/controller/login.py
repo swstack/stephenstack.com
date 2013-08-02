@@ -1,59 +1,44 @@
-"""
-session.query(MyClass).filter(MyClass.name == 'some name', MyClass.id > 5)
-"""
+from apiclient.discovery import build
+from app.controller.router import WSGIException
 from oauth2client.client import AccessTokenRefreshError, FlowExchangeError, \
     flow_from_clientsecrets
 import httplib2
-import json
 
 
-class AuthCodeException(Exception):
-    pass
-
-
-class AccessTokenException(Exception):
-    pass
-
-
-class UserNotConnectedException(Exception):
-    pass
+class GAPIException(WSGIException):
+    def __init__(self, *args, **kwargs):
+        WSGIException.__init__(self, *args, **kwargs)
 
 
 class LoginManager(object):
     def __init__(self, database, resource_manager):
         self._resource_manager = resource_manager
         self.database = database
-        self._client_secrets = None
         self._path_client_secrets = \
             self._resource_manager.get_fs_resource_path("client_secrets.json")
+        self._gapi = build('plus', 'v1')
 
     def start(self):
-        self._load_client_secrets()
-
-    #================================================================================
-    # Internal
-    #================================================================================
-    def _load_client_secrets(self):
-        if not self._client_secrets:
-            raw = open(self._resource_manager.\
-                       get_fs_resource_path("client_secrets.json"), "r").read()
-            self._client_secrets = json.loads(raw)
+        pass
 
     #================================================================================
     # Public
     #================================================================================
-    def get_client_id(self):
-        return self._client_secrets["web"]["client_id"]
+    def login(self, session, state, auth_code):
+        if state != session.get("state", 1):
+            GAPIException("Invalid state parameter", 401)
 
-    def login(self, gapi_one_time_auth_code, session, GAPI):
+        # TODO: this is a best practice apparently
+#        del session['state']
+
         try:
             # Upgrade the authorization code into a credentials object
 
             oauth_flow = flow_from_clientsecrets(self._path_client_secrets, scope='')
             oauth_flow.redirect_uri = 'postmessage'
-            credentials = oauth_flow.step2_exchange(gapi_one_time_auth_code)
+            credentials = oauth_flow.step2_exchange(auth_code)
         except FlowExchangeError:
-            raise AuthCodeException()
+            raise GAPIException("Auth code exception", 401)
 
         # An ID Token is a cryptographically-signed JSON object encoded in base 64.
         # Normally, it is critical that you validate an ID Token before you use it,
@@ -76,22 +61,25 @@ class LoginManager(object):
             http = credentials.authorize(http)
 
             # Get a list of people that this user has shared with this app
-            my_circles = GAPI.people().list(userId='me', collection='visible').execute(http=http)
+            my_circles = self._gapi.people().\
+                        list(userId='me', collection='visible').execute(http=http)
 
             # Get specific user data
-            me = GAPI.people().get(userId="me").execute(http=http)
+            me = self._gapi.people().get(userId="me").execute(http=http)
 
             result = dict(me, **my_circles)
         except AccessTokenRefreshError:
-            raise AccessTokenException()
+            raise GAPIException("Access token expcetion", 401)
 
+        bigger_img_url = result["image"]["url"].replace("sz=50", "sz=200")
+        result["image"]["url"] = bigger_img_url
         return result
 
     def logout(self, session):
         # Only disconnect a connected user.
         credentials = session.get('credentials')
         if credentials is None:
-            raise UserNotConnectedException()
+            raise GAPIException("User not connected", 401)
 
         # Execute HTTP GET request to revoke current token.
         access_token = credentials.access_token

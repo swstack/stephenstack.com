@@ -1,5 +1,3 @@
-from apiclient.discovery import build
-from app.controller.login import AuthCodeException, AccessTokenException
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -8,9 +6,16 @@ import logging
 import random
 import string
 
-GAPI = build('plus', 'v1')
-
 logger = logging.getLogger("webserver")
+
+
+class WSGIException(Exception):
+    def __init__(self, msg, status_code=404):
+        self.msg = msg
+        self.status_code = status_code
+
+    def __str__(self):
+        return repr("%s -- %s" % (self.msg, self.status_code))
 
 
 def _json_response(body, status):
@@ -77,6 +82,7 @@ class Router(object):
     # Internal
     #================================================================================
     def _get_static_root(self):
+        """Return path to static assets/resources"""
         if not self._static_root:
             self._static_root = self._resource_manager.get_fs_resource_root()
         return self._static_root
@@ -85,6 +91,9 @@ class Router(object):
     # Public
     #================================================================================
     def get_wsgi_app(self):
+        """Return standard wsgi application,
+                        http://www.python.org/dev/peps/pep-0333/
+        """
         return self._app
 
     #================================================================================
@@ -97,11 +106,11 @@ class Router(object):
         return _json_response("Successfully disconnected", 200)
 
     def index(self, request):
+        """Dat index"""
         session = request.session
         state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                            for x in xrange(32))
+                            for _ in xrange(32))
         session['state'] = state
-
         template_vars = {
               "resume": "",
               "STATE": unicode(state)
@@ -109,27 +118,12 @@ class Router(object):
         return Response(self._template_builder.get_index(template_vars))
 
     def login(self, request):
-        # Ensure that the request is not a forgery and that the user sending
-        # this connect request is the expected user.
+        """Ensure that the request is not a forgery and that the user sending
+        this connect request is the expected user.
+        """
+        unencoded_json = json.loads(request.body)
         session = request.session
-        request_params = json.loads(request.body)
-        state_request = request_params["state"]
-        state_session = session.get("state", 1)
-        if state_request != state_session:
-            return _json_response('Invalid state parameter.', 401)
-
-        # TODO: this is a best practice apparently
-#        del session['state']
-
-        gapi_one_time_auth_code = request_params["auth_code"]
-
-        try:
-            result = self._login_manager.login(gapi_one_time_auth_code, session, GAPI)
-            bigger_img_url = result["image"]["url"].replace("sz=50", "sz=200")
-            result["image"]["url"] = bigger_img_url
-        except AuthCodeException:
-            return _json_response("Auth code exception", 401)
-        except AccessTokenException:
-            return _json_response("Access token exception", 401)
-        else:
-            return _json_response(result, 200)
+        state = unencoded_json["state"]
+        auth_code = unencoded_json["auth_code"]
+        result = self._login_manager.login(session, state, auth_code)
+        return _json_response(result, 200)
