@@ -92,4 +92,4 @@ class LoginManager(object):
             del session['credentials']
         else:
             # For whatever reason, the given token was invalid.
-            raise Exception()
+            raise GAPIException("For whatever reason, the token is invalid.")
