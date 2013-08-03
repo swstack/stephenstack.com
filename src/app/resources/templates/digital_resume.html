@@ -3,12 +3,12 @@
         <div class="row">
             <div class="col-lg-3 col-offset-1">
                 <h2>DIGITAL RESUME</h2>
-	            <ul class="article-tags">
-	                <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
+	            <ul id="res-list" class="article-tags">
+	                <li id="objective" class="current" resume-page="1"><i class="icon-circle-arrow-right"></i>
 	                    OBJECTIVE
 	                </li>
 	                
-	                <li id="technical_skills"><i class="icon-circle-arrow-right"></i>
+	                <li id="technical"><i class="icon-circle-arrow-right"></i>
 	                    TECHNICAL SKILLS
 	                </li>
 	                
@@ -16,11 +16,11 @@
 	                    EDUCATION
 	                </li>
 	                
-	                <li><i class="icon-circle-arrow-right"></i>
+	                <li id="experience"><i class="icon-circle-arrow-right"></i>
 	                    EXPERIENCE
 	                </li>   
 	                
-	                <li><i class="icon-circle-arrow-right"></i>
+	                <li id="hobbies"><i class="icon-circle-arrow-right"></i>
 	                    HOBBIES
 	                </li>
 	            </ul>
@@ -35,17 +35,11 @@
 
 
 <script type="text/javascript">
-	$(".article-tags li").click(function(){
-		// TODO: something
-	});
-	
-	var url = '/static/resume.pdf';
-
     PDFJS.disableWorker = true;
 
     var pdfDoc = null,
         pageNum = 1,
-        scale = 1,
+        scale = 1.15,
         canvas = document.getElementById('resume_content'),
         ctx = canvas.getContext('2d');
 
@@ -69,25 +63,24 @@
       document.getElementById('page_count').textContent = pdfDoc.numPages;
     }
 
-    // Go to previous page
-    function goPrevious() {
-      if (pageNum <= 1)
-        return;
-      pageNum--;
-      renderPage(pageNum);
-    }
-
-    // Go to next page
-    function goNext() {
-      if (pageNum >= pdfDoc.numPages)
-        return;
-      pageNum++;
-      renderPage(pageNum);
-    }
-
+    $(".article-tags li").click(function(){
+        var PAGE_MAP = {
+                "objective": 1,
+                "technical": 1,
+                "education": 2,
+                "experience": 2,
+                "hobbies": 3,
+            };
+        var newPageNum = PAGE_MAP[$(this).attr("id")];
+        if (newPageNum != pageNum) {
+        	pageNum = newPageNum;
+        	renderPage(pageNum);
+        }
+    });
+    
     // Asynchronously download PDF as an ArrayBuffer
-    PDFJS.getDocument(url).then(function getPdfHelloWorld(_pdfDoc) {
-      pdfDoc = _pdfDoc;
-      renderPage(pageNum);
+    PDFJS.getDocument('/static/resume.pdf').then(function getPdfHelloWorld(_pdfDoc) {
+        pdfDoc = _pdfDoc;
+        renderPage(pageNum);
     });
 </script>
