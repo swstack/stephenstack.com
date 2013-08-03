@@ -18,12 +18,6 @@ class Database(object):
         self.session = scoped_session(sessionmaker(bind=self.engine,
                                                    autocommit=False,
                                                    autoflush=True))
-        self._create_db_if_needed()
-
-    #================================================================================
-    # Internal
-    #================================================================================
-    def _create_db_if_needed(self):
         Base.metadata.create_all(self.engine)
 
     #================================================================================

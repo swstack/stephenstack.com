@@ -16,3 +16,7 @@ class TemplateBuilder(object):
     def get_index(self, template_vars):
         index = self._jinja_env.get_template("index.html")
         return index.render(template_vars)
+
+    def get_admin(self, template_vars):
+        index = self._jinja_env.get_template("admin.html")
+        return index.render(template_vars)

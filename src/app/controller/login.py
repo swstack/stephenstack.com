@@ -16,13 +16,13 @@ class GAPIException(Exception):
 class LoginManager(object):
     def __init__(self, database, resource_manager):
         self._resource_manager = resource_manager
-        self.database = database
+        self._database = database
         self._path_client_secrets = \
             self._resource_manager.get_fs_resource_path("client_secrets.json")
-        self._gapi = build('plus', 'v1')
+        self._gapi = None
 
     def start(self):
-        pass
+        self._gapi = build('plus', 'v1')
 
     #================================================================================
     # Public
@@ -76,6 +76,7 @@ class LoginManager(object):
 
         bigger_img_url = result["image"]["url"].replace("sz=50", "sz=200")
         result["image"]["url"] = bigger_img_url
+
         return result
 
     def logout(self, session):

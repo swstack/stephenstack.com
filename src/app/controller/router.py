@@ -44,6 +44,38 @@ class Router(object):
         self._config = \
             Configurator(session_factory=UnencryptedCookieSessionFactoryConfig("pwnd"))
 
+        # Route: /static/<file> (:method:static)
+        self._config.add_static_view(name="static",
+                                     path=self._resource_manager.get_fs_resource_root())
+
+        # Route: /login (:method:login)
+        self._config.add_route("login", "/login")
+        self._config.add_view(self.login,
+                              route_name="login",
+                              request_method="POST",
+                              permission="read")
+
+        # Route: /logout (:method:logout)
+        self._config.add_route("logout", "/logout")
+        self._config.add_view(self.login,
+                              route_name="logout",
+                              request_method="POST",
+                              permission="read")
+
+        # Route: /admin (:method:admin)
+        self._config.add_route("admin", "/admin")
+        self._config.add_view(self.admin,
+                              route_name="admin",
+                              request_method="GET",
+                              permission="read")
+
+        # Route: /upload/resume (:method:upload_resume)
+        self._config.add_route("upload-resume", "/upload/resume")
+        self._config.add_view(self.upload_resume,
+                              route_name="upload-resume",
+                              request_method="POST",
+                              permission="read")
+
         # Route: /index (:method:index)
         self._config.add_route("index", "/")
         self._config.add_view(self.index,
@@ -51,24 +83,7 @@ class Router(object):
                               request_method="GET",
                               permission="read")
 
-        # Route: /static/<file> (:method:static)
-        self._config.add_static_view(name="static",
-                                     path=self._resource_manager.get_fs_resource_root())
-
-        # Route: /login/<state> (:method:login)
-        self._config.add_route("login", "/login")
-        self._config.add_view(self.login,
-                              route_name="login",
-                              request_method="POST",
-                              permission="read")
-        self._app = self._config.make_wsgi_app()
-
-        # Route: /login/<state> (:method:login)
-        self._config.add_route("logout", "/logout")
-        self._config.add_view(self.login,
-                              route_name="logout",
-                              request_method="POST",
-                              permission="read")
+        # Make WSGI application object
         self._app = self._config.make_wsgi_app()
 
     #================================================================================
@@ -133,3 +148,17 @@ class Router(object):
             return _json_response(e.msg, e.status_code)
         else:
             return _json_response(result, 200)
+
+    def upload_resume(self, request):
+        import cgi
+        form = cgi.FieldStorage()
+        if form.has_key("filename"):
+            item = form["filename"]
+            if item.file:
+                data = item.file.read()
+                print cgi.escape(data)
+
+        return Response("pewp")
+
+    def admin(self, request):
+        return Response(self._template_builder.get_admin({}))
