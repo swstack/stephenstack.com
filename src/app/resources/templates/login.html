@@ -1,54 +1,92 @@
-<div id="row-login" class="row">
-    <div class="col-lg-8 col-offset-3">
-        <h2>Login with, </h2>
-        <div id="signinBtn" class="gplusButton">
-            <span class="icon"></span>
-            <span class="buttonText">Google</span>
+<div class="container" id="container-logged-out">
+    <div class="row">
+        <div class="col-lg-8 col-offset-2">
+            <h2>Login with, </h2>
+	        <div id="signinBtn" class="gplusButton">
+	            <span class="icon"></span>
+	            <span class="buttonText">Google</span>
+	        </div>
         </div>
     </div>
 </div>
 
-<div id="row-profile" class="row" style="display: none">
-    <table id="login-table">
-        <tr>
-            <td colspan="2">
-                <h2 id="welcome_back">Welcome back, </h2>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="profile">
-                    <div id="user_profile_pic"></div>
-                </div>
-            </td>
-            <td>
-                 <div id="logoutBtn" class="gplusButton">
-                    <span class="icon"></span>
-                    <span class="buttonText">Logout</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
-        <h1 id="site_end">return);</h1>
+<div class="container" id="container-logged-in" style="display: None;">
+    <div class="row">
+        <div class="col-lg-8 col-offset-2" id="profile-title">
+            <!-- TBD -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-offset-2" id="profile-pic">
+            <!-- TBD -->
+        </div>
+        <div class="col-lg-4">
+            <div id="logoutBtn" class="gplusButton">
+                <span class="icon"></span>
+                <span class="buttonText">Logout</span>
+            </div>
+        </div> 
     </div>
 </div>
 
+<div class="container" id="container-spinner">
+    <div class="col-lg-4 col-offset-4" style="margin-left: auto; margin-right: auto;">
+        <div id="spinner">
+    </div>
+    </div>
+</div>
+
+<div class="col-lg-11">
+    <h1 id="site_end">return);</h1>
+</div>  
+
 <script type="text/javascript">
+
+	var spinner = new Sonic({
+	    width: 100,
+	    height: 100,
+	    fillColor: '#000',
+	    path: [
+	        ['line', 10, 10, 90, 10],
+	        ['line', 90, 10, 90, 90],
+	        ['line', 90, 90, 10, 90],
+	        ['line', 10, 90, 10, 10]
+	    ]
+	});
+	$("#spinner").html(spinner.canvas);
+	
+	function _showWorking() {
+		spinner.play();
+		$("#container-spinner").show();
+		$("#container-logged-in").hide();
+	}
+
+	function _doneWorking() {
+	    spinner.stop();
+	    $("#container-spinner").hide();
+        $("#container-logged-in").show();
+	}
+	
+    function _showLoggedIn() {
+    	$("#container-logged-in").show("slow");
+    	$("#container-logged-out").hide();
+    }
+   
+    function _showLoggedOut() {
+    	$("#container-logged-in").hide();
+        $("#container-logged-out").show();
+    }
+
 	function onSignInCallback(authResult) {
 	    if (authResult['access_token']) {
 	    	// success, user signed in
+	    	_showWorking();
 	    	_signIn(authResult.code);
-            $('#row-profile').show('slow');
-            $('#row-login').hide();
+            _showLoggedIn();
         } else if (authResult['error']) {
            // error, user not signed in
            console.log('There was an error: ' + authResult['error']);
-           $('#row-profile').hide('slow');
-           $('#row-login').show();
+           _showLoggedOut();
         }
 	}
 	
@@ -58,8 +96,8 @@
 	        url : '/login',
 	        contentType : 'application/octet-stream; charset=utf-8',
 	        success : function(userData) {
-	        	console.log(userData);
 	        	_renderProfile(userData);
+	        	_doneWorking();
 	        },
 	        processData : false,
 	        data : JSON.stringify({
@@ -70,10 +108,9 @@
 	}
 	
 	function _renderProfile (userData) {
-		$("#welcome_back").append(userData.displayName);
-		$("#user_profile_pic").append(
-				$('<p><img src=\"' + userData.image.url + '\"></p>')
-		);
+		$("#profile-title").append("poop");
+		$("#profile-title").html("<h2> Welcome Back, " + userData.displayName + ".");
+		$("#profile-pic").html('<img src=\"' + userData.image.url + '\">');
 	}
 	
 	$("#logoutBtn").click(function(){
@@ -82,10 +119,7 @@
             url : "/logout",
             async : false,
             success : function(result) {
-                console.log('revoke response: ' + result);
-                $('#row-profile').hide();
-                $('#profile').empty();
-                $('#row-login').show();
+                _showLoggedOut();
             },
             error : function(e) {
                 console.log(e);

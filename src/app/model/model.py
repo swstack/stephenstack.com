@@ -5,7 +5,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -13,3 +13,15 @@ class User(Base):
 
     def __repr__(self):
         return "<User(%s : %s)>" % (self.id, self.name)
+
+
+class Resume(Base):
+    __tablename__ = "resume"
+
+    id = Column(Integer, primary_key=True)
+    file = Column(String)
+    filename = Column(String)
+    date_uploaded = Column(String)
+
+    def __repr__(self):
+        return "<Resume(%s : %s : %s>" % (self.id, self.filename, self.date_uploaded)

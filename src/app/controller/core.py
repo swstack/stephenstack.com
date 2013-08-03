@@ -42,7 +42,8 @@ class ApplicationCore(object):
         self.login_manager = LoginManager(self.database, self.resource_manager)
         self.router = Router(self.resource_manager,
                              self.template_builder,
-                             self.login_manager)
+                             self.login_manager,
+                             self.database)
         self.debug_server = Server(self.router)
 
         # Start all Components ------------------------------------------------------

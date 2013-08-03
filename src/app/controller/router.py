@@ -1,4 +1,5 @@
 from app.controller.login import GAPIException
+from app.model.model import Resume
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -6,6 +7,7 @@ import json
 import logging
 import random
 import string
+import time
 
 logger = logging.getLogger("webserver")
 
@@ -28,11 +30,13 @@ class Router(object):
     #================================================================================
     def __init__(self, resource_manager,
                        template_builder,
-                       login_manager):
+                       login_manager,
+                       database):
         # Dependencies --------------------------------------------------------------
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
+        self._database = database
 
         # Internal state ------------------------------------------------------------
         self._static_root = None
@@ -57,7 +61,7 @@ class Router(object):
 
         # Route: /logout (:method:logout)
         self._config.add_route("logout", "/logout")
-        self._config.add_view(self.login,
+        self._config.add_view(self.logout,
                               route_name="logout",
                               request_method="POST",
                               permission="read")
@@ -132,13 +136,13 @@ class Router(object):
         This ``POST`` request is expected to have a `state` and `auth_code`
         encoded as json in the HTTP body.
         """
-        unencoded_json = json.loads(request.body)
+        decoded_json = json.loads(request.body)
 
-        state = unencoded_json.get("state")
+        state = decoded_json.get("state")
         if not state:
             return _json_response("Missing `POST` data: `state`", 401)
 
-        auth_code = unencoded_json.get("auth_code")
+        auth_code = decoded_json.get("auth_code")
         if not auth_code:
             return _json_response("Missing 'POST` data: `auth_code`", 401)
 
@@ -150,15 +154,20 @@ class Router(object):
             return _json_response(result, 200)
 
     def upload_resume(self, request):
-        import cgi
-        form = cgi.FieldStorage()
-        if form.has_key("filename"):
-            item = form["filename"]
-            if item.file:
-                data = item.file.read()
-                print cgi.escape(data)
-
-        return Response("pewp")
+        """Save a Resume object to the DB"""
+        new_resume = request.POST["new_resume"]
+        if not new_resume:
+            _json_response("Need a resume bro", 200)
+        filename = new_resume.filename
+        input_file = new_resume.file
+        session_db = self._database.get_session()
+        session_db.add(Resume(
+                              filename=filename,
+                              file=input_file.read(),
+                              date_uploaded=time.time(),
+                              ))
+        session_db.commit()
+        return Response("Cool")
 
     def admin(self, request):
         return Response(self._template_builder.get_admin({}))

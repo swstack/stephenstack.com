@@ -40,7 +40,8 @@ css shorthand:
 }
 
 body {
-    background: #A52A2A;
+   /* background: #A52A2A; */
+   background: #FFFFFF;
 }
 
 #sidebar {
@@ -203,59 +204,8 @@ body {
 /* Section 4 */
 #section4 {
 	background: #1E90FF;
-    margin-bottom: 20%;
     color: #F1F1F1;
-    padding-top: 15%;
-    padding-bottom: 5%;
 }
-
-#section4 h4.intro {
-    border-bottom: 1px solid #F1F1F1;
-    height: 35px;
-    margin-bottom: 18px;
-}
-
-#section4 .content {
-    position: relative;
-}
-
-#section4 .content .alt {
-    margin-top: 20px;
-}
-
-#section4 .content .alt h4 {
-    line-height: 24px;
-    margin: 0;
-    padding-right: 20px;
-}
-
-#section4 .content .alt h4, #section6 .content .alt span {
-    display: inline-block;
-}
-
-#section4 .content .alt h5 {
-    display: inline;
-    line-height: 20px;
-    margin: 0;
-    padding-right: 10px;
-}
-
-#section4 .content .span4 {
-    padding-right: 25px;
-}
-
-#section4 .btn-default {
-    margin-top: 15px;
-}
-
-#section4 #footer {
-    margin: 200px 0 40px;
-}
-
-#section4 #footer p {
-    font-size: 14px; font-size: 1.4rem;
-}
-
 
 /* Section 5 */
 .gplusButton {
