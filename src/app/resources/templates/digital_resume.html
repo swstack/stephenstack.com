@@ -1,47 +1,38 @@
-<div class="container-fluid">
-    <div class="row-fluid title">
-   
-        <!-- Sidebar -->
-        <div class="span4">
-            <h2>DIGITAL RESUME</h2>
-			<ul class="article-tags">
-			    <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
-				    OBJECTIVE
-				</li>
-				
-				<li id="technical_skills"><i class="icon-circle-arrow-right"></i>
-				    TECHNICAL SKILLS
-				</li>
-				
-				<li id="education"><i class="icon-circle-arrow-right"></i>
-				    EDUCATION
-				</li>
-				
-				<li><i class="icon-circle-arrow-right"></i>
-				    EXPERIENCE
-				</li>   
-				
-				<li><i class="icon-circle-arrow-right"></i>
-				    HOBBIES
-			    </li>
-			</ul>
-        </div>
-
-        <!-- Resume content -->
-        <div class="span8">
-            <div>
-			    <button id="prev" onclick="goPrevious()">Previous</button>
-			    <button id="next" onclick="goNext()">Next</button>
-			    &nbsp; &nbsp;
-			    <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-			  </div>
-			  
-			  <div>
-			    <canvas id="resume_content" style="border:1px solid black"></canvas>
-			  </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-3 col-offset-1">
+                <h2>DIGITAL RESUME</h2>
+	            <ul class="article-tags">
+	                <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
+	                    OBJECTIVE
+	                </li>
+	                
+	                <li id="technical_skills"><i class="icon-circle-arrow-right"></i>
+	                    TECHNICAL SKILLS
+	                </li>
+	                
+	                <li id="education"><i class="icon-circle-arrow-right"></i>
+	                    EDUCATION
+	                </li>
+	                
+	                <li><i class="icon-circle-arrow-right"></i>
+	                    EXPERIENCE
+	                </li>   
+	                
+	                <li><i class="icon-circle-arrow-right"></i>
+	                    HOBBIES
+	                </li>
+	            </ul>
+            </div>
+            <div class="col-lg-8">
+                <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+                <canvas id="resume_content" style="border:1px solid black"></canvas>
+            </div>
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
 	$(".article-tags li").click(function(){
