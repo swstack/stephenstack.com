@@ -1,3 +1,4 @@
+from app.controller.login import GAPIException
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -9,24 +10,16 @@ import string
 logger = logging.getLogger("webserver")
 
 
-class WSGIException(Exception):
-    def __init__(self, msg, status_code=404):
-        self.msg = msg
-        self.status_code = status_code
-
-    def __str__(self):
-        return repr("%s -- %s" % (self.msg, self.status_code))
-
-
 def _json_response(body, status):
-    return \
-        Response(
-             body=json.dumps(body),
-             status=status,
-             headers={
-                      "Content-Type": "application/json",
-                      }
-                 )
+    try:
+        body = json.dumps(body)
+    except TypeError:
+        body = ""
+        logger.error("Could not serialize to JSON!! -- %s", body)
+    finally:
+        return Response(body=body,
+                        status=status,
+                        headers={"Content-Type": "application/json"})
 
 
 class Router(object):
@@ -120,10 +113,23 @@ class Router(object):
     def login(self, request):
         """Ensure that the request is not a forgery and that the user sending
         this connect request is the expected user.
+
+        This ``POST`` request is expected to have a `state` and `auth_code`
+        encoded as json in the HTTP body.
         """
         unencoded_json = json.loads(request.body)
-        session = request.session
-        state = unencoded_json["state"]
-        auth_code = unencoded_json["auth_code"]
-        result = self._login_manager.login(session, state, auth_code)
-        return _json_response(result, 200)
+
+        state = unencoded_json.get("state")
+        if not state:
+            return _json_response("Missing `POST` data: `state`", 401)
+
+        auth_code = unencoded_json.get("auth_code")
+        if not auth_code:
+            return _json_response("Missing 'POST` data: `auth_code`", 401)
+
+        try:
+            result = self._login_manager.login(request.session, state, auth_code)
+        except GAPIException, e:
+            return _json_response(e.msg, e.status_code)
+        else:
+            return _json_response(result, 200)

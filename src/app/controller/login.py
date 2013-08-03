@@ -1,13 +1,16 @@
 from apiclient.discovery import build
-from app.controller.router import WSGIException
 from oauth2client.client import AccessTokenRefreshError, FlowExchangeError, \
     flow_from_clientsecrets
 import httplib2
 
 
-class GAPIException(WSGIException):
-    def __init__(self, *args, **kwargs):
-        WSGIException.__init__(self, *args, **kwargs)
+class GAPIException(Exception):
+    def __init__(self, msg, status_code=404):
+        self.msg = msg
+        self.status_code = status_code
+
+    def __str__(self):
+        return repr("%s -- %s" % (self.msg, self.status_code))
 
 
 class LoginManager(object):
