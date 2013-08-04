@@ -2,8 +2,16 @@
     <div class="col-lg-4 col-offset-3">
         <form enctype="multipart/form-data" action="/upload/resume"
               method="post" accept-charset="utf-8">
-		    <label for="new_resume" >Filename:</label>
-		    <input id="new_resume" name="new_resume" type="file" value="" />
+             
+            <!-- docx upload -->
+		    <label for="new_resume_docx" >DOCX: </label>
+		    <input id="new_resume_docx" name="new_resume_docx" type="file" value="" />
+		    
+		    <!-- pdf upload -->
+		    <label for="new_resume_pdf" >PDF: </label>
+		    <input id="new_resume_pdf" name="new_resume_pdf" type="file" value="" />
+		    
+		    <!-- Submit -->
 		    <input type="submit" value="submit" />
 		</form>
     </div>

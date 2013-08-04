@@ -4,7 +4,7 @@
             <div class="col-lg-3 col-offset-1">
                 <h2>DIGITAL RESUME</h2>
 	            <ul id="res-list" class="article-tags">
-	                <li id="objective" class="current" resume-page="1"><i class="icon-circle-arrow-right"></i>
+	                <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
 	                    OBJECTIVE
 	                </li>
 	                
@@ -24,6 +24,10 @@
 	                    HOBBIES
 	                </li>
 	            </ul>
+                <h5>Last Uploaded</h5>
+                {{ resume.last_uploaded }}
+                <a href="/resume/pdf">.pdf</a>
+                <a href="/resume/docx">.docx</a>
             </div>
             <div class="col-lg-8">
                 <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
@@ -77,10 +81,9 @@
         	renderPage(pageNum);
         }
     });
-    
-    // Asynchronously download PDF as an ArrayBuffer
-    PDFJS.getDocument('/static/resume.pdf').then(function getPdfHelloWorld(_pdfDoc) {
-        pdfDoc = _pdfDoc;
-        renderPage(pageNum);
+
+    PDFJS.getDocument("/resume/pdf").then(function getPdf(_pdfDoc){
+    	pdfDoc = _pdfDoc;
+    	renderPage(pageNum);
     });
 </script>

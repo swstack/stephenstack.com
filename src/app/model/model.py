@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Enum, DateTime, LargeBinary
 from sqlalchemy.ext.declarative.api import declarative_base
 
 Base = declarative_base()
@@ -19,9 +19,10 @@ class Resume(Base):
     __tablename__ = "resume"
 
     id = Column(Integer, primary_key=True)
-    file = Column(String)
+    file = Column(LargeBinary)
     filename = Column(String)
-    date_uploaded = Column(String)
+    filetype = Column(Enum("pdf", "docx"))
+    date_uploaded = Column(DateTime)
 
     def __repr__(self):
         return "<Resume(%s : %s : %s>" % (self.id, self.filename, self.date_uploaded)

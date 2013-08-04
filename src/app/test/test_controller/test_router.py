@@ -2,7 +2,6 @@ from app.controller.router import Router
 from app.test.utilities import MockResourceManager
 from app.view.templates import TemplateBuilder
 from mock import Mock
-from pyramid.httpexceptions import HTTPError
 from wsgi_intercept import add_wsgi_intercept, remove_wsgi_intercept
 from wsgi_intercept.urllib2_intercept import install_opener
 import json
@@ -21,7 +20,8 @@ class TestRouter(unittest.TestCase):
         self._template_builder.start()
         self._router = Router(resource_manager=self._resource_manager,
                               template_builder=self._template_builder,
-                              login_manager=Mock())
+                              login_manager=Mock(),
+                              database=Mock())
         self._router.start()
         self._app = self._router.get_wsgi_app()
         install_opener()

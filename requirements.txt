@@ -1,6 +1,8 @@
 Website
 ------------
 
+Origin --
+
 - as me, i'd like to be able to upload my resume to my site, and this resume will be the one downloadable by users
 
 - as a user, i'd like to know when the resume was last uploaded.
@@ -9,9 +11,22 @@ Website
 
 - as a user, i'd like my password encrypted
 
--as a user, if the login icon is going to be in a weird place, like the bottom link in my navbar, let's add a non-intrusive persistent alert to tell them to login.
+- as a user, if the login icon is going to be in a weird place, like the bottom link in my navbar, let's add a non-intrusive persistent alert to tell them to login.
 
 - as a user, i should have to log in to contact me, biatch!
+
+
+8/3/13 --
+Convert "contact" page into a message board with the following features
+    - dropdown bar to select ongoing conversations, for everyone except
+      me this will always be len(1)
+    - ongoing conversations is just a scrollable div where new messages from
+      either party are just appended and timestamped.
+ 
+ Resume todo's:
+    - Show last uploaded
+    - Download as PDF button
+    - Download as DOCX button
 
 
 Android App

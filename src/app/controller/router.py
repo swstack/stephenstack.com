@@ -1,13 +1,13 @@
 from app.controller.login import GAPIException
 from app.model.model import Resume
 from pyramid.config import Configurator
-from pyramid.response import Response
+from pyramid.response import Response, FileResponse
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
+import datetime
 import json
 import logging
 import random
 import string
-import time
 
 logger = logging.getLogger("webserver")
 
@@ -70,6 +70,13 @@ class Router(object):
         self._config.add_route("admin", "/admin")
         self._config.add_view(self.admin,
                               route_name="admin",
+                              request_method="GET",
+                              permission="read")
+
+        # Route: /resume (:method:resume)
+        self._config.add_route("get-resume", "/resume/{type}")
+        self._config.add_view(self.resume,
+                              route_name="get-resume",
                               request_method="GET",
                               permission="read")
 
@@ -155,19 +162,61 @@ class Router(object):
 
     def upload_resume(self, request):
         """Save a Resume object to the DB"""
-        new_resume = request.POST["new_resume"]
-        if not new_resume:
-            _json_response("Need a resume bro", 200)
-        filename = new_resume.filename
-        input_file = new_resume.file
+        new_resume_pdf = request.POST["new_resume_pdf"]
+        new_resume_docx = request.POST["new_resume_docx"]
+
+        if new_resume_pdf is None:
+            return _json_response("Need a pdf resume bro", 200)
+
+        if new_resume_docx is None:
+            return _json_response("Need .doc resume bro", 200)
+
+        # extract pdf filename and data
+        filename_pdf = new_resume_pdf.filename
+        file_pdf = new_resume_pdf.file
+
+        # extract docx filename and data
+        filename_docx = new_resume_docx.filename
+        file_docx = new_resume_docx.file
+
+        # database session and current datetime
         session_db = self._database.get_session()
+        current_dt = datetime.datetime.now()
+
+        # make docx Resume
         session_db.add(Resume(
-                              filename=filename,
-                              file=input_file.read(),
-                              date_uploaded=time.time(),
+                              file=file_docx.read(),
+                              filename=str(filename_docx),
+                              filetype="docx",
+                              date_uploaded=current_dt,
                               ))
+
+        # make pdf Resume
+        session_db.add(Resume(
+                              file=file_pdf.read(),
+                              filename=str(filename_pdf),
+                              filetype="pdf",
+                              date_uploaded=current_dt,
+                              ))
+
+        # save
         session_db.commit()
+
         return Response("Cool")
+
+    def resume(self, request):
+        """GET Resume PDF file content"""
+        filetype = request.matchdict.get("type")
+        if filetype == "pdf":
+            most_recent_resume = self._database.get_most_recent_pdf_resume()
+        elif filetype == "docx":
+            most_recent_resume = self._database.get_most_recent_docx_resume()
+        else:
+            most_recent_resume = ""
+        return Response(
+                            most_recent_resume.file,
+                            content_type="application/pdf",
+                            )
 
     def admin(self, request):
         return Response(self._template_builder.get_admin({}))
