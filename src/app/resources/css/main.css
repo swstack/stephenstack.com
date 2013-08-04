@@ -84,9 +84,6 @@ body {
     font-size: 250%;
 }
 
-#section1 .intro {
-}
-
 #section1 .thumb {
     display: none;
 }
@@ -206,6 +203,21 @@ body {
 	background: #1E90FF;
     color: #F1F1F1;
 }
+
+#cont-logged-in {
+	position: absolute;    
+}
+
+#login-overlay button {
+	margin-left: 20%;
+	margiin-right: 50%;
+	position: absolute;
+	height: 100px;
+	width: 200px;
+	font-size: 200%;
+}
+
+
 
 /* Section 5 */
 .gplusButton {

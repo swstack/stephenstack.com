@@ -41,7 +41,6 @@
 </div>  
 
 <script type="text/javascript">
-
 	var spinner = new Sonic({
 	    width: 100,
 	    height: 100,
@@ -58,6 +57,7 @@
 	function _showWorking() {
 		spinner.play();
 		$("#container-spinner").show();
+		$("#container-logged-out").hide();
 		$("#container-logged-in").hide();
 	}
 
@@ -70,11 +70,17 @@
     function _showLoggedIn() {
     	$("#container-logged-in").show("slow");
     	$("#container-logged-out").hide();
+    	for (var i = 0; i < onLoginCallbacks.length; i++) {
+            onLoginCallbacks[i]();
+        }
     }
    
     function _showLoggedOut() {
     	$("#container-logged-in").hide();
         $("#container-logged-out").show();
+        for (var i = 0; i < onLogoutCallbacks.length; i++) {
+        	onLogoutCallbacks[i]();
+        }
     }
 
 	function onSignInCallback(authResult) {

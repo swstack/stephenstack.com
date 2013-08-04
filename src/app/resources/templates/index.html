@@ -52,6 +52,16 @@
 				      "accesstype": "offline",
 			    });
 			  }
+			
+			var onLoginCallbacks = Array();
+		    function registerLoginCallback(callback) {
+		        onLoginCallbacks.push(callback);
+		    }
+		    
+		    var onLogoutCallbacks = Array();
+		    function registerLogoutCallback(callback) {
+		        onLogoutCallbacks.push(callback);
+		    }
 		</script>
 	</head>
 	
@@ -83,7 +93,7 @@
 						    <i class="icon-envelope"></i>
 						    <span>Contact</span>
 						</li>
-						<li data-section="5" class="last">
+						<li data-section="5">
 						    <i class="icon-pencil"></i>
 							<span>Login</span>
 					    </li>
@@ -107,7 +117,7 @@
 				</section>
 	
 				<section class="section" id="section4" data-section="4">
-				    {% include "contact.html" %}
+				    {% include "message_board.html" %}
 				</section>
 			
 				<section class="section" id="section5" data-section="5">

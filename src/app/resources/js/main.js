@@ -54,7 +54,7 @@ $(document).ready(function ($) {
 	// Waypoints Scrolling
 	
 	var links = $('.navigation').find('li');
-	var button = $('.intro button');
+	var button = $('.goto-section button');
     var section = $('section');
     var mywindow = $(window);
     var htmlbody = $('html,body');
