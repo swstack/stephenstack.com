@@ -202,21 +202,15 @@ body {
 #section4 {
 	background: #1E90FF;
     color: #F1F1F1;
+    height: window.height;
 }
 
-#cont-logged-in {
-	position: absolute;    
-}
-
-#login-overlay button {
+.col-msg-board button{
 	margin-left: 20%;
-	margiin-right: 50%;
-	position: absolute;
+	width: 300px;
 	height: 100px;
-	width: 200px;
-	font-size: 200%;
+	font-size: 250%;
 }
-
 
 
 /* Section 5 */
