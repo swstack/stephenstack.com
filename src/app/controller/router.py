@@ -1,7 +1,7 @@
 from app.controller.login import GAPIException
 from app.model.model import Resume
 from pyramid.config import Configurator
-from pyramid.response import Response, FileResponse
+from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 import datetime
 import json
@@ -126,14 +126,31 @@ class Router(object):
 
     def index(self, request):
         """Dat index"""
+
+        # template vars
+        template_vars = {}
+
+        # get user web session
         session = request.session
+
+        # gen and save state
         state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                             for _ in xrange(32))
         session['state'] = state
-        template_vars = {
-              "resume": "",
-              "STATE": unicode(state)
-        }
+        template_vars.update(STATE=unicode(state))
+
+        # get last uploaded pdf resume timestamp if possible
+        pdf_resume = self._database.get_most_recent_pdf_resume()
+        if pdf_resume:
+            last_uploaded = pdf_resume.last_uploaded
+        else:
+            last_uploaded = ""
+
+        template_vars.update(resume={
+                                     "last_uploaded": last_uploaded,
+                                     }
+                             )
+
         return Response(self._template_builder.get_index(template_vars))
 
     def login(self, request):
@@ -211,12 +228,16 @@ class Router(object):
             most_recent_resume = self._database.get_most_recent_pdf_resume()
         elif filetype == "docx":
             most_recent_resume = self._database.get_most_recent_docx_resume()
+
+        if most_recent_resume:
+            file_data = most_recent_resume.file
         else:
-            most_recent_resume = ""
+            file_data = ""
+
         return Response(
-                            most_recent_resume.file,
-                            content_type="application/pdf",
-                            )
+                        file_data,
+                        content_type="application/pdf",
+                        )
 
     def admin(self, request):
         return Response(self._template_builder.get_admin({}))

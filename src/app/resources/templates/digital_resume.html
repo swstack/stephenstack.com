@@ -1,40 +1,45 @@
-<div class="row">
-    <div class="col-lg-12">
-        <div class="row">
-            <div class="col-lg-3 col-offset-1">
-                <h2>DIGITAL RESUME</h2>
-	            <ul id="res-list" class="article-tags">
-	                <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
-	                    OBJECTIVE
-	                </li>
-	                
-	                <li id="technical"><i class="icon-circle-arrow-right"></i>
-	                    TECHNICAL SKILLS
-	                </li>
-	                
-	                <li id="education"><i class="icon-circle-arrow-right"></i>
-	                    EDUCATION
-	                </li>
-	                
-	                <li id="experience"><i class="icon-circle-arrow-right"></i>
-	                    EXPERIENCE
-	                </li>   
-	                
-	                <li id="hobbies"><i class="icon-circle-arrow-right"></i>
-	                    HOBBIES
-	                </li>
-	            </ul>
-                <h5>Last Uploaded</h5>
-                {{ resume.last_uploaded }}
-                <a href="/resume/pdf">.pdf</a>
-                <a href="/resume/docx">.docx</a>
-            </div>
-            <div class="col-lg-8">
-                <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-                <canvas id="resume_content" style="border:1px solid black"></canvas>
-            </div>
-        </div>
-    </div>
+<div class="container">
+	<div class="row">
+	    <div class="col-lg-12">
+	        <div class="row">
+	            <div class="col-lg-3">
+	                <h2>DIGITAL RESUME</h2>
+		            <ul id="res-list" class="article-tags">
+		                <li id="objective" class="current"><i class="icon-circle-arrow-right"></i>
+		                    OBJECTIVE
+		                </li>
+		                
+		                <li id="technical"><i class="icon-circle-arrow-right"></i>
+		                    TECHNICAL SKILLS
+		                </li>
+		                
+		                <li id="education"><i class="icon-circle-arrow-right"></i>
+		                    EDUCATION
+		                </li>
+		                
+		                <li id="experience"><i class="icon-circle-arrow-right"></i>
+		                    EXPERIENCE
+		                </li>   
+		                
+		                <li id="hobbies"><i class="icon-circle-arrow-right"></i>
+		                    HOBBIES
+		                </li>
+		            </ul>
+		            <div style="color: #000">
+			                <hr />
+			                <h5>Last Uploaded</h5>
+			                {{ resume.last_uploaded }}<br />
+			                <a href="/resume/pdf">.pdf</a><br />
+			                <a href="/resume/docx">.docx</a><br />
+		            </div>
+	            </div>
+	            <div class="col-lg-8">
+	                <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+	                <canvas id="resume_content" style="border:1px solid black"></canvas>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
 
 

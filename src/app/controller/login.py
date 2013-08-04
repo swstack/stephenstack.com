@@ -1,7 +1,11 @@
 from apiclient.discovery import build
+from app.model.model import User
 from oauth2client.client import AccessTokenRefreshError, FlowExchangeError, \
     flow_from_clientsecrets
 import httplib2
+import logging
+
+logger = logging.getLogger("login")
 
 
 class GAPIException(Exception):
@@ -23,6 +27,27 @@ class LoginManager(object):
 
     def start(self):
         self._gapi = build('plus', 'v1')
+
+    #================================================================================
+    # Internal
+    #================================================================================
+    def _create_local_user_if_needed(self, user_data):
+        gapi_id = user_data["id"]
+        session_db = self._database.get_session()
+        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()
+        if len(user) > 1:
+            logger.critical("It appears the GAPI ID is not unique!")
+            return None
+        if user:
+            logger.info("User already exists locally.")
+        else:
+            logger.info("Creating user %s", gapi_id)
+            session_db.add(User(
+                                gapi_id=gapi_id,
+                                name=user_data["displayName"],
+                                )
+                           )
+            session_db.commit()
 
     #================================================================================
     # Public
@@ -76,6 +101,9 @@ class LoginManager(object):
 
         bigger_img_url = result["image"]["url"].replace("sz=50", "sz=200")
         result["image"]["url"] = bigger_img_url
+
+        # create local user if needed
+        self._create_local_user_if_needed(result)
 
         return result
 

@@ -8,8 +8,8 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
+    gapi_id = Column(Integer)
     name = Column(String)
-    picture_url = Column(Integer)
 
     def __repr__(self):
         return "<User(%s : %s)>" % (self.id, self.name)
