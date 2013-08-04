@@ -26,11 +26,14 @@
 		                </li>
 		            </ul>
 		            <div style="color: #000">
+		                    <hr />
+	                        <h3>Last Uploaded</h3>
+			                {{ resume.last_uploaded }}
 			                <hr />
-			                <h5>Last Uploaded</h5>
-			                {{ resume.last_uploaded }}<br />
-			                <a href="/resume/pdf">.pdf</a><br />
-			                <a href="/resume/docx">.docx</a><br />
+			                <h3>Downloads</h3>
+			                <a href="/resume/pdf" class="btn btn-primary btn-large">.pdf</a>
+			                <a href="/resume/docx" class="btn btn-primary btn-large">.docx</a>
+			                <hr />
 		            </div>
 	            </div>
 	            <div class="col-lg-8">

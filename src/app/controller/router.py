@@ -142,7 +142,7 @@ class Router(object):
         # get last uploaded pdf resume timestamp if possible
         pdf_resume = self._database.get_most_recent_pdf_resume()
         if pdf_resume:
-            last_uploaded = pdf_resume.last_uploaded
+            last_uploaded = pdf_resume.date_uploaded
         else:
             last_uploaded = ""
 
@@ -177,7 +177,9 @@ class Router(object):
         else:
             return _json_response(result, 200)
 
+    # admin only
     def upload_resume(self, request):
+        # TODO: This method is long and should be moved into separate component
         """Save a Resume object to the DB"""
         new_resume_pdf = request.POST["new_resume_pdf"]
         new_resume_docx = request.POST["new_resume_docx"]
@@ -189,31 +191,31 @@ class Router(object):
             return _json_response("Need .doc resume bro", 200)
 
         # extract pdf filename and data
-        filename_pdf = new_resume_pdf.filename
+        filename_pdf = str(new_resume_pdf.filename)
         file_pdf = new_resume_pdf.file
 
         # extract docx filename and data
-        filename_docx = new_resume_docx.filename
+        filename_docx = str(new_resume_docx.filename)
         file_docx = new_resume_docx.file
 
         # database session and current datetime
         session_db = self._database.get_session()
-        current_dt = datetime.datetime.now()
+        dt_current = datetime.datetime.now()
 
         # make docx Resume
         session_db.add(Resume(
                               file=file_docx.read(),
-                              filename=str(filename_docx),
+                              filename=filename_docx,
                               filetype="docx",
-                              date_uploaded=current_dt,
+                              date_uploaded=dt_current,
                               ))
 
         # make pdf Resume
         session_db.add(Resume(
                               file=file_pdf.read(),
-                              filename=str(filename_pdf),
+                              filename=filename_pdf,
                               filetype="pdf",
-                              date_uploaded=current_dt,
+                              date_uploaded=dt_current,
                               ))
 
         # save
@@ -234,10 +236,17 @@ class Router(object):
         else:
             file_data = ""
 
+        filename = most_recent_resume.filename
+
         return Response(
-                        file_data,
-                        content_type="application/pdf",
+                        body=file_data,
+                        status=200,
+                        headers={
+                 "Content-Type": "application/octet-stream",
+                 "Content-Disposition": "attachment",
+                                 }
                         )
 
+    # admin only
     def admin(self, request):
         return Response(self._template_builder.get_admin({}))
