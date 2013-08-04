@@ -31,23 +31,37 @@ class LoginManager(object):
     #================================================================================
     # Internal
     #================================================================================
-    def _create_local_user_if_needed(self, user_data):
+    def _create_and_update_local_user_if_needed(self, user_data):
         gapi_id = user_data["id"]
         session_db = self._database.get_session()
-        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()
-        if len(user) > 1:
+        user_gapi_id_query = \
+                session_db.query(User).filter(User.gapi_id == gapi_id).all()
+        if len(user_gapi_id_query) > 1:
             logger.critical("It appears the GAPI ID is not unique!")
+            logger.error("Unexpected =(")
             return None
-        if user:
+
+        thumbnail_url = user_data["image"]["url"]
+        profile_pic_url = user_data["image"]["url"].replace("sz=50", "sz=200")
+
+        if user_gapi_id_query:
             logger.info("User already exists locally.")
+            user = user_gapi_id_query[0]
+            user.thumbnail_url = thumbnail_url
+            user.profile_pic_url = profile_pic_url
         else:
             logger.info("Creating user %s", gapi_id)
-            session_db.add(User(
-                                gapi_id=gapi_id,
-                                name=user_data["displayName"],
-                                )
-                           )
-            session_db.commit()
+            user = User(
+                        gapi_id=gapi_id,
+                        name=user_data["displayName"],
+                        thumbnail_url=thumbnail_url,
+                        profile_pic_url=profile_pic_url,
+                        )
+            session_db.add(user)
+
+        # save
+        session_db.commit()
+        return user
 
     #================================================================================
     # Public
@@ -88,24 +102,16 @@ class LoginManager(object):
             http = httplib2.Http()
             http = credentials.authorize(http)
 
-            # Get a list of people that this user has shared with this app
-            my_circles = self._gapi.people().\
-                        list(userId='me', collection='visible').execute(http=http)
-
             # Get specific user data
-            me = self._gapi.people().get(userId="me").execute(http=http)
+            user_data = self._gapi.people().get(userId="me").execute(http=http)
 
-            result = dict(me, **my_circles)
         except AccessTokenRefreshError:
             raise GAPIException("Access token expcetion", 401)
 
-        bigger_img_url = result["image"]["url"].replace("sz=50", "sz=200")
-        result["image"]["url"] = bigger_img_url
-
         # create local user if needed
-        self._create_local_user_if_needed(result)
+        user = self._create_and_update_local_user_if_needed(user_data)
 
-        return result
+        return user
 
     def logout(self, session):
         # Only disconnect a connected user.

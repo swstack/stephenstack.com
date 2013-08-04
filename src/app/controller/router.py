@@ -175,11 +175,16 @@ class Router(object):
         except GAPIException, e:
             return _json_response(e.msg, e.status_code)
         else:
-            return _json_response(result, 200)
+            user = {
+                    "id": result.id,
+                    "name": result.name,
+                    "thumbnail_url": result.thumbnail_url,
+                    "profile_pic_url": result.profile_pic_url,
+                    }
+            return _json_response(user, 200)
 
     # admin only
     def upload_resume(self, request):
-        # TODO: This method is long and should be moved into separate component
         """Save a Resume object to the DB"""
         new_resume_pdf = request.POST["new_resume_pdf"]
         new_resume_docx = request.POST["new_resume_docx"]
@@ -235,8 +240,6 @@ class Router(object):
             file_data = most_recent_resume.file
         else:
             file_data = ""
-
-        filename = most_recent_resume.filename
 
         return Response(
                         body=file_data,
