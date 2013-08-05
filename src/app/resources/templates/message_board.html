@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-8 col-offset-2 col-msg-board" id="login-overlay">
             <div class="goto-section">
-                <button class="btn" data-section="5">
+                <button class="btn" data-section="5" id="login-btn">
                     Login <span> </span> <i class="icon-circle-arrow-down"></i>
                 </button>
             </div>
@@ -16,11 +16,24 @@
             </div>
             <div id="msg-board">
             </div>
+            <div class="input-group msg-board-input">
+                <span class="input-group-addon input-small" id="msg-submit">
+                    <button class="btn">
+                        <i class="icon-pencil" style="color: black"></i>
+                    </button>
+                </span>
+			    <input type="text" class="input-large">
+			</div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+
+$("#msg-submit").click(function(){
+	console.log("poop")
+});
+
 function onLogin() {
     $("#cont-logged-in").fadeTo("fast", 1);
     $("#login-overlay").hide();
@@ -29,7 +42,6 @@ function onLogin() {
 function onLogout() {
 	$("#login-overlay").show();
 	$("#cont-logged-in").fadeTo("fast", .2);
-	
 }
 
 registerLoginCallback(onLogin);

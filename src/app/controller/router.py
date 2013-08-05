@@ -209,7 +209,7 @@ class Router(object):
 
         # make docx Resume
         session_db.add(Resume(
-                              file=file_docx.read(),
+                              filedata=file_docx.read(),
                               filename=filename_docx,
                               filetype="docx",
                               date_uploaded=dt_current,
@@ -217,7 +217,7 @@ class Router(object):
 
         # make pdf Resume
         session_db.add(Resume(
-                              file=file_pdf.read(),
+                              filedata=file_pdf.read(),
                               filename=filename_pdf,
                               filetype="pdf",
                               date_uploaded=dt_current,
@@ -237,12 +237,12 @@ class Router(object):
             most_recent_resume = self._database.get_most_recent_docx_resume()
 
         if most_recent_resume:
-            file_data = most_recent_resume.file
+            filedata = most_recent_resume.filedata
         else:
-            file_data = ""
+            filedata = ""
 
         return Response(
-                        body=file_data,
+                        body=filedata,
                         status=200,
                         headers={
                  "Content-Type": "application/octet-stream",
