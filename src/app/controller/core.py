@@ -8,6 +8,7 @@ from logging import getLogger
 import os
 import time
 from app.debug.server import Server
+from app.util.platform import LinuxPlatform
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
@@ -21,6 +22,7 @@ class ApplicationCore(object):
     # Construction
     #================================================================================
     def __init__(self):
+        self.platform = None
         self.resource_manager = None
         self.logging_configurator = None
         self.database = None
@@ -36,17 +38,23 @@ class ApplicationCore(object):
         logging_configurator.start()
 
         # Init all Components -------------------------------------------------------
+        self.platform = LinuxPlatform()
         self.resource_manager = ResourceManager()
         self.template_builder = TemplateBuilder(self.resource_manager)
         self.database = Database(self.resource_manager)
-        self.login_manager = LoginManager(self.database, self.resource_manager)
+        self.login_manager = LoginManager(self.database,
+                                          self.resource_manager,
+                                          self.platform)
         self.router = Router(self.resource_manager,
                              self.template_builder,
                              self.login_manager,
-                             self.database)
+                             self.database,
+                             self.platform)
         self.debug_server = Server(self.router)
 
         # Start all Components ------------------------------------------------------
+        self._start_component("Linux Platform", self.platform)
+
         self._start_component("Template Builder", self.template_builder)
 
         self._start_component("Login Manager", self.login_manager)

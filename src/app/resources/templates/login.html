@@ -104,6 +104,7 @@
 	        success : function(userData) {
 	        	_renderProfile(userData);
 	        	_doneWorking();
+	        	updateMessageBoard();
 	        },
 	        processData : false,
 	        data : JSON.stringify({

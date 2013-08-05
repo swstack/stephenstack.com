@@ -1,4 +1,3 @@
-"""Platform abstraction layer (some may be simulated)"""
 from dateutil.tz import tzutc
 from pytz import timezone
 import datetime
@@ -6,9 +5,10 @@ import time
 
 
 class LinuxPlatform(object):
-    """Platform corresponding to to the "real" world"""
-
     def __init__(self):
+        pass
+
+    def start(self):
         pass
 
     def time_monotonic(self):

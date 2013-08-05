@@ -3,7 +3,6 @@ from app.model.model import Resume
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
-import datetime
 import json
 import logging
 import random
@@ -31,12 +30,14 @@ class Router(object):
     def __init__(self, resource_manager,
                        template_builder,
                        login_manager,
-                       database):
+                       database,
+                       platform):
         # Dependencies --------------------------------------------------------------
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
         self._database = database
+        self._platform = platform
 
         # Internal state ------------------------------------------------------------
         self._static_root = None
@@ -85,6 +86,13 @@ class Router(object):
         self._config.add_view(self.upload_resume,
                               route_name="upload-resume",
                               request_method="POST",
+                              permission="read")
+
+        # Route: /index (:method:update_message_board)
+        self._config.add_route("messageboard", "/messageboard")
+        self._config.add_view(self.update_message_board,
+                              route_name="messageboard",
+                              request_method="GET",
                               permission="read")
 
         # Route: /index (:method:index)
@@ -205,7 +213,7 @@ class Router(object):
 
         # database session and current datetime
         session_db = self._database.get_session()
-        dt_current = datetime.datetime.now()
+        dt_current = self._platform.time_datetime_now()
 
         # make docx Resume
         session_db.add(Resume(
@@ -253,3 +261,11 @@ class Router(object):
     # admin only
     def admin(self, request):
         return Response(self._template_builder.get_admin({}))
+
+    def update_message_board(self, request):
+        """Return a list of messages between the currently logged in user and
+        myself, descending starting w/ most recent.
+        """
+        session = request.session
+        convo = self._database.get_conversation(session["gapi_id"])
+        return _json_response(convo, 200)

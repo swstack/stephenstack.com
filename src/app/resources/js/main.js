@@ -153,24 +153,6 @@ $(document).ready(function ($) {
 	    });
 	}    
 
-	$("#login_input").click(function() {
-	    $.ajax({
-	           type: "POST",
-	           url: "/login",
-	           data: $("#login_form").serialize(),
-	           complete: function(success) {
-	               console.log(success);
-	               if (success) {
-	                   $("#login_success").show();
-	                   $("#login_success").fadeOut(5000);
-	               } else {
-	                   $("#login_fail").show();
-	                   $("#login_fail").fadeOut(5000);
-	               }
-	           },
-	    });
-	    return false;
-	});
 	
 	$("#site_end").click(function() {
 		$("html, body").animate({ scrollTop: 0 }, "slow");

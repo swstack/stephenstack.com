@@ -63,6 +63,16 @@
 		    function registerLogoutCallback(callback) {
 		        onLogoutCallbacks.push(callback);
 		    }
+		    
+		    function updateMessageBoard() {
+		        $.ajax({
+		            type : 'GET',
+		            url : '/messageboard',
+		            success : function(messages) {
+		                console.log("messages", messages);
+		            },
+		        });
+		    }
 		</script>
 	</head>
 	

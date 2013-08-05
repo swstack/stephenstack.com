@@ -1,5 +1,5 @@
 from apiclient.discovery import build
-from app.model.model import User
+from app.model.model import User, Message
 from oauth2client.client import AccessTokenRefreshError, FlowExchangeError, \
     flow_from_clientsecrets
 import httplib2
@@ -18,9 +18,10 @@ class GAPIException(Exception):
 
 
 class LoginManager(object):
-    def __init__(self, database, resource_manager):
+    def __init__(self, database, resource_manager, platform):
         self._resource_manager = resource_manager
         self._database = database
+        self._platform = platform
         self._path_client_secrets = \
             self._resource_manager.get_fs_resource_path("client_secrets.json")
         self._gapi = None
@@ -59,6 +60,14 @@ class LoginManager(object):
                         )
             session_db.add(user)
 
+            intro_msg = Message(
+                                sender=self._database._get_my_user().id,
+                                receiver=user.id,
+                                msg_data="Welcome to my site!",
+                                datetime_sent=self._platform.time_datetime_now(),
+                                )
+            session_db.add(intro_msg)
+
         # save
         session_db.commit()
         return user
@@ -90,11 +99,11 @@ class LoginManager(object):
         # receive really comes from Google and is valid. If your server passes the
         # ID Token to other components of your app, it is extremely important that
         # the other components validate the token before using it.
-        gplus_id = credentials.id_token['sub']
+        gapi_id = credentials.id_token['sub']
 
         # Store the access token in the session for later use.
         session['credentials'] = credentials
-        session['gplus_id'] = gplus_id
+        session['gapi_id'] = gapi_id
 
         # get some data about the user
         try:

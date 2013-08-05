@@ -21,7 +21,8 @@ class TestRouter(unittest.TestCase):
         self._router = Router(resource_manager=self._resource_manager,
                               template_builder=self._template_builder,
                               login_manager=Mock(),
-                              database=Mock())
+                              database=Mock(),
+                              platform=Mock())
         self._router.start()
         self._app = self._router.get_wsgi_app()
         install_opener()

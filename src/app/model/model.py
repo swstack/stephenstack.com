@@ -9,7 +9,7 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
-    gapi_id = Column(Integer)
+    gapi_id = Column(String)
     name = Column(String)
     thumbnail_url = Column(String)
     profile_pic_url = Column(String)
@@ -31,7 +31,7 @@ class Resume(Base):
     filedata = Column(LargeBinary)
     filename = Column(String)
     filetype = Column(Enum("pdf", "docx"))
-    date_uploaded = Column(DateTime)
+    datetime_uploaded = Column(DateTime)
 
     def __init__(self, filedata, filename, filetype, date_uploaded):
         self.filedata = filedata
@@ -50,11 +50,13 @@ class Message(Base):
     sender = Column(ForeignKey(User.id))
     receiver = Column(ForeignKey(User.id))
     msg_data = Column(String)
+    datetime_sent = Column(DateTime)
 
-    def __init__(self, sender, receiver, msg_data):
+    def __init__(self, sender, receiver, msg_data, datetime_sent):
         self.sender = sender
         self.receiver = receiver
         self.msg_data = msg_data
+        self.datetime_sent = datetime_sent
 
     def __repr__(self):
         return "<Message(from %s to %s : %s>" % (self.sender,
