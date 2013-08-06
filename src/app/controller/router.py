@@ -253,8 +253,8 @@ class Router(object):
                         body=filedata,
                         status=200,
                         headers={
-                 "Content-Type": "application/octet-stream",
-                 "Content-Disposition": "attachment",
+                                 "Content-Type": "application/octet-stream",
+                                 "Content-Disposition": "attachment",
                                  }
                         )
 

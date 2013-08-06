@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum, DateTime, LargeBinary
 from sqlalchemy.ext.declarative.api import declarative_base
 from sqlalchemy.schema import ForeignKey
+import json
 
 Base = declarative_base()
 
@@ -22,6 +23,17 @@ class User(Base):
 
     def __repr__(self):
         return "<User(%s : %s)>" % (self.id, self.name)
+
+    def to_json(self, encode=False):
+        obj = {
+               "gapi_id": self.gapi_id,
+               "name": self.name,
+               "thumbnail": self.thumbnail_url,
+              }
+        if encode:
+            return json.dumps(obj)
+        else:
+            return obj
 
 
 class Resume(Base):
@@ -62,3 +74,15 @@ class Message(Base):
         return "<Message(from %s to %s : %s>" % (self.sender,
                                                  self.receiver,
                                                  self.msg_data)
+
+    def to_json(self, encode=False):
+        obj = {
+               "sender": self.sender,
+               "receiver": self.receiver,
+               "timestamp": self.datetime_sent,
+               "msg": self.msg_data,
+              }
+        if encode:
+            return json.dumps(obj)
+        else:
+            return obj
