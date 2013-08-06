@@ -37,7 +37,7 @@ css shorthand:
 body {
    /* background: #A52A2A; */
    background: #FFFFFF;
-   cursor:url(/static/img/swoard_cursor.png), pointer;
+   cursor:url(/static/img/sword_cursor.png), pointer;
 }
 
 #sidebar {
