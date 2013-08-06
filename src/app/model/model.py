@@ -15,7 +15,7 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
-    gapi_id = Column(String)
+    gapi_id = Column(String)  # TODO: Make unique constraint
     name = Column(String)
     thumbnail_url = Column(String)
     profile_pic_url = Column(String)

@@ -34,20 +34,16 @@ class LoginManager(object):
     #================================================================================
     def _create_and_update_local_user_if_needed(self, user_data):
         gapi_id = user_data["id"]
+
         session_db = self._database.get_session()
-        user_gapi_id_query = \
-                session_db.query(User).filter(User.gapi_id == gapi_id).all()
-        if len(user_gapi_id_query) > 1:
-            logger.critical("It appears the GAPI ID is not unique!")
-            logger.error("Unexpected =(")
-            return None
+
+        user = self._database.get_user(gapi_id=gapi_id)
 
         thumbnail_url = user_data["image"]["url"]
         profile_pic_url = user_data["image"]["url"].replace("sz=50", "sz=200")
 
-        if user_gapi_id_query:
+        if user:
             logger.info("User already exists locally.")
-            user = user_gapi_id_query[0]
             user.thumbnail_url = thumbnail_url
             user.profile_pic_url = profile_pic_url
         else:
@@ -61,7 +57,8 @@ class LoginManager(object):
             session_db.add(user)
 
             intro_msg = Message(
-                                sender=self._database._get_my_user().id,
+                                sender=self._database.\
+                                            get_user(self._database.my_gapi_id).id,
                                 receiver=user.id,
                                 msg_data="Welcome to my site!",
                                 datetime_sent=self._platform.time_datetime_now(),
