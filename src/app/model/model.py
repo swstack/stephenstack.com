@@ -1,9 +1,14 @@
 from sqlalchemy import Column, Integer, String, Enum, DateTime, LargeBinary
 from sqlalchemy.ext.declarative.api import declarative_base
 from sqlalchemy.schema import ForeignKey
+from datetime import datetime
 import json
 
 Base = declarative_base()
+
+
+def _strftime(dt):
+    return datetime.strftime(dt, "%d/%m/%y %H:%M")
 
 
 class User(Base):
@@ -79,7 +84,7 @@ class Message(Base):
         obj = {
                "sender": self.sender,
                "receiver": self.receiver,
-               "timestamp": self.datetime_sent,
+               "timestamp": _strftime(self.datetime_sent),
                "msg": self.msg_data,
               }
         if encode:

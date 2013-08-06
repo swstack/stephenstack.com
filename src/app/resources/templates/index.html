@@ -69,7 +69,7 @@
 		            type : 'GET',
 		            url : '/messageboard',
 		            success : function(messages) {
-		                console.log("messages", messages);
+		                messageBoard.update(messages);
 		            },
 		        });
 		    }

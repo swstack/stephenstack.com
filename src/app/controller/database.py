@@ -88,7 +88,7 @@ class Database(object):
         # replace sender/receiver id's with jsonified users
         for json_msg in merged_messages:
             sender_id = json_msg["sender"]
-            json_msg["sender"] = self.get_user(sender_id)
+            json_msg["sender"] = self.get_user(sender_id).to_json()
 
             receiver_id = json_msg["receiver"]
             json_msg["receiver"] = self.get_user(receiver_id).to_json()

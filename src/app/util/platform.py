@@ -11,18 +11,6 @@ class LinuxPlatform(object):
     def start(self):
         pass
 
-    def time_monotonic(self):
-        """Get a monotonic time value as a floating point value in seconds
-
-        This could be a unix timestamp value or could be something completely
-        different (like uptime).
-        """
-        return time.time()
-
-    def time_unix(self):
-        """Get the number of seconds since the unix epoch in seconds"""
-        return time.time()
-
     def time_sleep(self, number_seconds):
         """Suspend thread execution for at least `number_seconds`"""
         return time.sleep(number_seconds)

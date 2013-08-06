@@ -30,8 +30,15 @@
 
 <script type="text/javascript">
 
+var messageBoard = new function (messages) {
+    this.update = function(messages) {
+        console.log(messages);
+    };
+}
+
+
 $("#msg-submit").click(function(){
-	console.log("poop")
+	console.log("msg-submit");
 });
 
 function onLogin() {

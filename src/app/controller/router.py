@@ -16,7 +16,7 @@ def _json_response(body, status):
         body = json.dumps(body)
     except TypeError:
         body = ""
-        logger.error("Could not serialize to JSON!! -- %s", body)
+        logger.error("Could not serialize to JSON! -- %s", body)
     finally:
         return Response(body=body,
                         status=status,
