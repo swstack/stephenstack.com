@@ -159,7 +159,7 @@ class Router(object):
         # get last uploaded pdf resume timestamp if possible
         pdf_resume = self._database.get_most_recent_pdf_resume()
         if pdf_resume:
-            last_uploaded = pdf_resume.date_uploaded
+            last_uploaded = pdf_resume.datetime_uploaded
         else:
             last_uploaded = ""
 
@@ -229,7 +229,7 @@ class Router(object):
                               filedata=file_docx.read(),
                               filename=filename_docx,
                               filetype="docx",
-                              date_uploaded=dt_current,
+                              datetime_uploaded=dt_current,
                               ))
 
         # make pdf Resume
@@ -237,7 +237,7 @@ class Router(object):
                               filedata=file_pdf.read(),
                               filename=filename_pdf,
                               filetype="pdf",
-                              date_uploaded=dt_current,
+                              datetime_uploaded=dt_current,
                               ))
 
         # save

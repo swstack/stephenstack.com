@@ -50,11 +50,11 @@ class Resume(Base):
     filetype = Column(Enum("pdf", "docx"))
     datetime_uploaded = Column(DateTime)
 
-    def __init__(self, filedata, filename, filetype, date_uploaded):
+    def __init__(self, filedata, filename, filetype, datetime_uploaded):
         self.filedata = filedata
         self.filename = filename
         self.filetype = filetype
-        self.date_uploaded = date_uploaded
+        self.datetime_uploaded = datetime_uploaded
 
     def __repr__(self):
         return "<Resume(%s : %s : %s>" % (self.id, self.filename, self.date_uploaded)
