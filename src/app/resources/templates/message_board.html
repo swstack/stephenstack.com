@@ -22,7 +22,7 @@
                         <i class="icon-pencil" style="color: black"></i>
                     </button>
                 </span>
-			    <input type="text" class="input-large">
+			    <input type="text" class="input-large" id="msg-sub-input">
 			</div>
         </div>
     </div>
@@ -30,15 +30,44 @@
 
 <script type="text/javascript">
 
-var messageBoard = new function (messages) {
-    this.update = function(messages) {
-        console.log(messages);
+function MessageBoard (messages) {
+	// experimenting with OO javascript
+    this.messages = messages;
+	
+    this._msgDiv = function() {
+    	return "<div class='alert'> \
+    		          <img src=";
+    	console.log(x);
+    }
+	
+    this._displayMessage = function(msg) {
+    	console.log(msg);
+    	$("#msg-board").append(this._msgDiv(
+    			));
+    }
+	
+    this.update = function() {
+    	console.log(this.messages);
+    	for (var i = 0; i < this.messages.length; i++) {
+    		this._displayMessage(this.messages[i]);
+    	}
     };
 }
 
-
 $("#msg-submit").click(function(){
-	console.log("msg-submit");
+	console.log($("#msg-sub-input").val());
+	$.ajax({
+        type : 'POST',
+        url : '/message',
+        contentType : 'application/octet-stream; charset=utf-8',
+        success : function() {
+        	updateMessageBoard()
+        },
+        processData : false,
+        data : JSON.stringify({
+               "msg": $("#msg-sub-input").val(),
+               }),
+    });
 });
 
 function onLogin() {

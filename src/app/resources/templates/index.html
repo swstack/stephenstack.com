@@ -69,7 +69,9 @@
 		            type : 'GET',
 		            url : '/messageboard',
 		            success : function(messages) {
-		                messageBoard.update(messages);
+		            	// experimenting with OO javascript
+		                var mb = new MessageBoard(messages);
+		                mb.update();
 		            },
 		        });
 		    }

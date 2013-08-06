@@ -28,12 +28,6 @@ class Database(object):
         session_db = self.get_session()
         return session_db.query(Resume).order_by(Resume.datetime_uploaded.desc())
 
-    def _get_my_user(self):
-        session_db = self.get_session()
-        the_great_and_powerful = \
-            session_db.query(User).filter(User.gapi_id == "110649862410112880601")[0]
-        return the_great_and_powerful
-
     def _merge_conversations(self, convo_a, convo_b):
         if len(convo_a) < 1:
             result = convo_b
@@ -47,24 +41,51 @@ class Database(object):
                 if convo_a[i].datetime_sent <= convo_b[j].datetime_sent:
                     result.append(convo_a[i])
                     i += 1
+                    if i == len(convo_a):
+                        result.extend(convo_b)
+                        break
                 else:
                     result.append(convo_b[j])
                     j += 1
+                    if j == len(convo_b):
+                        result.extend(convo_a)
+                        break
+
         return result
 
     #================================================================================
     # Public
     #================================================================================
+    @property
+    def my_gapi_id(self):
+        return "110649862410112880601"
+
     def get_session(self):
         return self.session()
 
-    def get_user(self, uid):
+    def get_user(self, uid=None, gapi_id=None):
+        """Fetch a user using one or more criteria"""
+        def _try_index_zero(indexable):
+            try:
+                return indexable[0]
+            except IndexError:
+                return None
+
         session_db = self.get_session()
-        return session_db.query(User).filter(User.id == uid).all()[0]
+
+        if uid:
+            return \
+                _try_index_zero(session_db.query(User).filter(User.id == uid).all())
+
+        if gapi_id:
+            return \
+                _try_index_zero(session_db.query(User).filter(User.gapi_id == gapi_id).all())
+
+        return None
 
     def get_conversation(self, gapi_id):
         session_db = self.get_session()
-        me = self._get_my_user()
+        me = self.get_user(gapi_id=self.my_gapi_id)
         user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]
 
         # get all messages sent by me, to this person, ordered from oldest to newest
@@ -88,10 +109,10 @@ class Database(object):
         # replace sender/receiver id's with jsonified users
         for json_msg in merged_messages:
             sender_id = json_msg["sender"]
-            json_msg["sender"] = self.get_user(sender_id).to_json()
+            json_msg["sender"] = self.get_user(uid=sender_id).to_json()
 
             receiver_id = json_msg["receiver"]
-            json_msg["receiver"] = self.get_user(receiver_id).to_json()
+            json_msg["receiver"] = self.get_user(uid=receiver_id).to_json()
 
         return merged_messages
 

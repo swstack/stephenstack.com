@@ -1,5 +1,5 @@
 from app.controller.login import GAPIException
-from app.model.model import Resume
+from app.model.model import Resume, Message
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -22,6 +22,8 @@ def _json_response(body, status):
                         status=status,
                         headers={"Content-Type": "application/json"})
 
+
+# TODO: Become more restful
 
 class Router(object):
     #================================================================================
@@ -93,6 +95,13 @@ class Router(object):
         self._config.add_view(self.update_message_board,
                               route_name="messageboard",
                               request_method="GET",
+                              permission="read")
+
+        # Route: /index (:method:message)
+        self._config.add_route("message", "/message")
+        self._config.add_view(self.message,
+                              route_name="message",
+                              request_method="POST",
                               permission="read")
 
         # Route: /index (:method:index)
@@ -269,3 +278,26 @@ class Router(object):
         session = request.session
         convo = self._database.get_conversation(session["gapi_id"])
         return _json_response(convo, 200)
+
+    def message(self, request):
+        decoded_msg = json.loads(request.body).get("msg")
+
+        # if not message, do nothing
+        if not decoded_msg:
+            return _json_response("", 200)
+
+        session = request.session
+        user = self._database.get_user(gapi_id=session["gapi_id"])
+        me = self._database.get_user(gapi_id=self._database.my_gapi_id)
+
+        session_db = self._database.get_session()
+        session_db.add(
+                Message(
+                        sender=user.id,
+                        receiver=me.id,
+                        msg_data=decoded_msg,
+                        datetime_sent=self._platform.time_datetime_now(),
+                        )
+        )
+        session_db.commit()
+        return Response("Thanks", 200)
