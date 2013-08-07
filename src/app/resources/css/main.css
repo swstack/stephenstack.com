@@ -191,6 +191,14 @@ body {
 	background-color: #F1F1F1"
 }
 
+#msg-board .alert .left{
+	float: left;
+}
+
+#msg-board .alert .right{
+    float: right;
+}
+
 
 /* Section 5 */
 .gplusButton {
