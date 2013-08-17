@@ -26,22 +26,22 @@ def _json_response(body, status):
 # TODO: Become more restful
 
 class Router(object):
-    #================================================================================
+    #===========================================================================
     # Construction
-    #================================================================================
+    #===========================================================================
     def __init__(self, resource_manager,
                        template_builder,
                        login_manager,
                        database,
                        platform):
-        # Dependencies --------------------------------------------------------------
+        # Dependencies ---------------------------------------------------------
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
         self._database = database
         self._platform = platform
 
-        # Internal state ------------------------------------------------------------
+        # Internal state -------------------------------------------------------
         self._static_root = None
         self._config = None
         self._app = None
@@ -53,7 +53,8 @@ class Router(object):
 
         # Route: /static/<file> (:method:static)
         self._config.add_static_view(name="static",
-                                     path=self._resource_manager.get_fs_resource_root())
+                                     path=self._resource_manager.\
+                                                    get_fs_resource_root())
 
         # Route: /login (:method:login)
         self._config.add_route("login", "/login")
@@ -114,27 +115,27 @@ class Router(object):
         # Make WSGI application object
         self._app = self._config.make_wsgi_app()
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _get_static_root(self):
         """Return path to static assets/resources"""
         if not self._static_root:
             self._static_root = self._resource_manager.get_fs_resource_root()
         return self._static_root
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     def get_wsgi_app(self):
         """Return standard wsgi application,
                         http://www.python.org/dev/peps/pep-0333/
         """
         return self._app
 
-    #================================================================================
+    #===========================================================================
     # Routes
-    #================================================================================
+    #===========================================================================
     def logout(self, request):
         """Revoke current user's token and reset their session."""
         session = request.session

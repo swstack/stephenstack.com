@@ -2,7 +2,6 @@ from app.model.model import Base, Resume, User, Message
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.orm.session import sessionmaker
-import heapq
 
 
 class Database(object):
@@ -21,9 +20,9 @@ class Database(object):
                                                    autoflush=True))
         Base.metadata.create_all(self.engine)
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _resumes_newest_to_oldest(self):
         session_db = self.get_session()
         return session_db.query(Resume).order_by(Resume.datetime_uploaded.desc())
@@ -53,9 +52,9 @@ class Database(object):
 
         return result
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     @property
     def my_gapi_id(self):
         return "110649862410112880601"
@@ -79,7 +78,8 @@ class Database(object):
 
         if gapi_id:
             return \
-                _try_index_zero(session_db.query(User).filter(User.gapi_id == gapi_id).all())
+                _try_index_zero(session_db.query(User).\
+                                    filter(User.gapi_id == gapi_id).all())
 
         return None
 

@@ -29,9 +29,9 @@ class LoginManager(object):
     def start(self):
         self._gapi = build('plus', 'v1')
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _create_and_update_local_user_if_needed(self, user_data):
         gapi_id = user_data["id"]
 
@@ -69,9 +69,9 @@ class LoginManager(object):
         session_db.commit()
         return user
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     def login(self, session, state, auth_code):
         if state != session.get("state", 1):
             GAPIException("Invalid state parameter", 401)
@@ -82,7 +82,8 @@ class LoginManager(object):
         try:
             # Upgrade the authorization code into a credentials object
 
-            oauth_flow = flow_from_clientsecrets(self._path_client_secrets, scope='')
+            oauth_flow = flow_from_clientsecrets(self._path_client_secrets,
+                                                 scope='')
             oauth_flow.redirect_uri = 'postmessage'
             credentials = oauth_flow.step2_exchange(auth_code)
         except FlowExchangeError:
