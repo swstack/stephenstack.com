@@ -24,7 +24,6 @@ cover
 .tox
 
 # Others
-build
 dist
 *.orig
 log.txt*
