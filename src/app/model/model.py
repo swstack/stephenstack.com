@@ -57,7 +57,8 @@ class Resume(Base):
         self.datetime_uploaded = datetime_uploaded
 
     def __repr__(self):
-        return "<Resume(%s : %s : %s>" % (self.id, self.filename, self.date_uploaded)
+        return "<Resume(%s : %s : %s>" % (self.id, self.filename,
+                                          self.date_uploaded)
 
 
 class Message(Base):

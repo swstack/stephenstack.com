@@ -2,7 +2,6 @@ from app.model.model import Base, Resume, User, Message
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.orm.session import sessionmaker
-import heapq
 
 
 class Database(object):
@@ -21,14 +20,17 @@ class Database(object):
                                                    autoflush=True))
         Base.metadata.create_all(self.engine)
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _resumes_newest_to_oldest(self):
         session_db = self.get_session()
         return session_db.query(Resume).order_by(Resume.datetime_uploaded.desc())
 
     def _merge_conversations(self, convo_a, convo_b):
+        """Given two lists of messages, return one list sorted ascending
+        by `datetime_sent`
+        """
         if len(convo_a) < 1:
             result = convo_b
 
@@ -53,9 +55,9 @@ class Database(object):
 
         return result
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     @property
     def my_gapi_id(self):
         return "110649862410112880601"
@@ -75,23 +77,45 @@ class Database(object):
 
         if uid:
             return \
-                _try_index_zero(session_db.query(User).filter(User.id == uid).all())
+                _try_index_zero(session_db.query(User).\
+                                    filter(User.id == uid).all())
 
         if gapi_id:
             return \
-                _try_index_zero(session_db.query(User).filter(User.gapi_id == gapi_id).all())
+                _try_index_zero(session_db.query(User).\
+                                    filter(User.gapi_id == gapi_id).all())
 
         return None
 
-    def get_conversation(self, gapi_id):
+    def get_contacts(self, user):
+        """Contacts are defined as:
+                A list of users that the currently logged in user has an
+                ongoing conversation with.
+        """
+        session_db = self.get_session()
+        contacts = set()
+
+        # find all contacts `user` has messaged by iterating over the `user`s
+        # messages and making a set of the recipients
+        for msg in session_db.query(Message).filter(Message.sender == user.id):
+            contacts.add(self.get_user(msg.receiver))
+
+        return list(contacts)
+
+    def get_conversation(self, user):
+        """Conversation is defined as:
+                A list of messages between two parties, party A is always
+                user `110649862410112880601`, and party B is always the
+                currently logged in user.
+        """
         session_db = self.get_session()
         me = self.get_user(gapi_id=self.my_gapi_id)
-        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]
 
         # get all messages sent by me, to this person, ordered from oldest to newest
-        msgs_me = session_db.query(Message).filter(Message.sender == me.id,
-                                                   Message.receiver == user.id).\
-                                            order_by(Message.datetime_sent.asc()).\
+        msgs_me = session_db.query(Message).\
+                                filter(Message.sender == me.id,
+                                       Message.receiver == user.id).\
+                                order_by(Message.datetime_sent.asc()).\
                                 all()
 
         # get all messages sent by this person, to me, ordered from oldest to newest

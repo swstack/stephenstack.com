@@ -185,3 +185,88 @@ $(document).ready(function ($) {
         );    
 	});
 });
+
+
+function MessageBoard (board_data) {
+	// construct
+    this.messages = null;
+    this.contacts = null;
+    this.recipient = null;  // recipient of convo with currently 
+    		  	  	 	    // signed in user
+
+	// methods: internal
+    this._displayMessage = function(username, thumbnail, message, htmlclass) {
+    	username = "<b>" + username + "</b><br \>";
+    	thumbnail = "<img src='" + thumbnail + "'>";
+    	var htmlMessage = "<div class='alert " + htmlclass + "'>" +
+    	                                                thumbnail + 
+    	                                                 username + 
+    	                                                  message + 
+                          "</div>";
+    	$("#msg-board").append(htmlMessage);
+    };
+
+    this._displayContact = function(contact) {
+    	$("#contacts").append("<option value='" + contact.id + "'>"
+    			                       + contact.name +
+    			              "</option>");
+    }
+
+ // methods: external
+    this.update = function(convo, contacts) {
+	    this.conversation = convo;
+	    this.contacts = contacts;
+
+    	/* Handle convo length of 0 */
+    	$("#msg-board").empty();
+    	$("#contacts").empty();
+
+    	for (var i = 0; i < this.contacts.length; i++) {
+    		var contact = this.contacts[i];
+    		this._displayContact(contact);
+    	}
+
+    	var convoLength = this.conversation.length;
+
+    	if (convoLength < 1) {
+    		console.log("-- No convo! --");
+    		return null;
+    	}
+	
+    	// randomly select the first user in the convo as the person who will
+    	// appear on the left side of the message board
+    	var preDefinedSender = this.conversation[0].sender.gapi_id;
+
+    	for (var i = 0; i < convoLength; i++) {
+    		var msg = this.conversation[i];
+    		var sender = msg.sender;
+    		if (sender.gapi_id == preDefinedSender) {
+                // left
+                this._displayMessage(sender.name,
+                		             sender.thumbnail,
+                		             msg.msg,
+                		             "left");
+            } else {
+                // right
+                this._displayMessage(sender.name,
+                		             sender.thumbnail,
+                		             msg.msg,
+                		             "right");
+            }
+    	}
+    };
+}
+
+var msgBoard = new MessageBoard();
+
+function updateMessageBoard(recipient) {
+	if (recipient == undefined)
+		recipient = null;
+    $.ajax({
+        type : 'GET',
+        url : '/messageboard/' + recipient,
+        success : function(board_data) {
+            msgBoard.update(board_data.convo, board_data.contacts);
+        },
+    });
+}
