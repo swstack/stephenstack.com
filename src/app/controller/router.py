@@ -1,8 +1,9 @@
 from app.controller.login import GAPIException
-from app.model.model import Resume, Message
+from app.model.model import Resume, Message, User
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
+from pyramid.view import view_config
 import json
 import logging
 import random
@@ -92,7 +93,7 @@ class Router(object):
                               permission="read")
 
         # Route: /index (:method:update_message_board)
-        self._config.add_route("messageboard", "/messageboard")
+        self._config.add_route("messageboard", "/messageboard/{recipient}")
         self._config.add_view(self.update_message_board,
                               route_name="messageboard",
                               request_method="GET",
@@ -111,6 +112,7 @@ class Router(object):
                               route_name="index",
                               request_method="GET",
                               permission="read")
+        self._config.scan("app.controller.router")
 
         # Make WSGI application object
         self._app = self._config.make_wsgi_app()
@@ -273,16 +275,26 @@ class Router(object):
         """Return a list of messages between the currently logged in user and
         myself, descending starting w/ most recent.
         """
-        session = request.session
-        convo = self._database.get_conversation(session["gapi_id"])
-        contacts = self._database.get_contacts(session["gapi_id"])
+        session_db = self._database.get_session()
+        recipient = request.matchdict.get("recipient")
+
+        user = session_db.query(User).\
+                    filter(User.gapi_id == request.session["gapi_id"]).all()[0]
+
+        if recipient == "null":
+            conversation = self._database.get_conversation(user)
+        else:
+            recipient = session_db.query(User).\
+                            filter(User.id == int(recipient)).all()[0]
+            conversation = self._database.get_conversation(recipient)
+
+        contacts = self._database.get_contacts(user)
         return _json_response({
-                               "convo": convo,
+                               "convo": conversation,
                                "contacts": [{
                                              "name": user.name,
                                              "id": user.id
-                                             } for user in contacts
-                                            ],
+                                             } for user in contacts],
                                }, 200)
 
     def message(self, request):

@@ -8,7 +8,10 @@
             </div>
         </div>
         <div class="col-lg-8 col-offset-2 col-msg-board" id="cont-logged-in">
-            <h2 style="color: #333333">Message Board</h2>
+            <div class="row">
+                <img src="/static/img/underconstruction_1.png">
+                <h2 style="color: #333333">Message Board</h2>
+            </div>
             <div>
                 <select id="contacts">
                 </select>
@@ -28,81 +31,24 @@
 </div>
 
 <script type="text/javascript">
-function MessageBoard (board_data) {
-	// construct
-    this.board_data = board_data;
-
-	// methods: internal
-    this._displayMessage = function(username, thumbnail, message, htmlclass) {
-    	username = "<b>" + username + "</b><br \>";
-    	thumbnail = "<img src='" + thumbnail + "'>";
-    	var htmlMessage = "<div class='alert " + htmlclass + "'>" +
-    	                                                thumbnail + 
-    	                                                 username + 
-    	                                                  message + 
-                          "</div>";
-    	$("#msg-board").append(htmlMessage);
-    };
-
-    this._displayContact = function(contact) {
-    	$("#contacts").append("<option value='" + contact.id + "'>"
-    			                       + contact.name +
-    			              "</option>");
-    }
-    
- // methods: external
-    this.update = function() {
-    	/* Handle convo length of 0 */
-    	$("#msg-board").empty();
-    	$("#contacts").empty();
-    	
-    	
-    	var msgs = this.board_data.convo;
-    	var contacts = this.board_data.contacts;
-    	
-    	for (var i = 0; i < contacts.length; i++) {
-    		var contact = contacts[i]
-    		this._displayContact(contact);
-    	}
-
-    	var msgLength = msgs.length;
-
-    	if (msgLength < 1) {
-    		console.log("-- No convo! --");
-    		return null;
-    	}
-	
-    	// randomly select the first user in the convo as the person who will
-    	// appear on the left side of the message board
-    	var preDefinedSender = msgs[0].sender.gapi_id;
-
-    	for (var i = 0; i < msgs.length; i++) {
-    		var msg = msgs[i];
-    		var sender = msg.sender;
-    		if (sender.gapi_id == preDefinedSender) {
-                // left
-                this._displayMessage(sender.name, sender.thumbnail, msg.msg, "left");
-            } else {
-                // right
-                this._displayMessage(sender.name, sender.thumbnail, msg.msg, "right");
-            }
-    	}
-    };
-}
-
 $("#msg-submit").click(function(){
 	$.ajax({
         type : 'POST',
         url : '/message',
         contentType : 'application/octet-stream; charset=utf-8',
         success : function() {
-        	updateMessageBoard()
+        	updateMessageBoard(msgBoard.recipient);
         },
         processData : false,
         data : JSON.stringify({
                "msg": $("#msg-sub-input").val(),
                }),
     });
+});
+
+$("#contacts").change(function(){
+	msgBoard.recipient = this.value;
+	updateMessageBoard(msgBoard.recipient);
 });
 
 function onLogin() {

@@ -87,13 +87,12 @@ class Database(object):
 
         return None
 
-    def get_contacts(self, gapi_id):
+    def get_contacts(self, user):
         """Contacts are defined as:
                 A list of users that the currently logged in user has an
                 ongoing conversation with.
         """
         session_db = self.get_session()
-        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]
         contacts = set()
 
         # find all contacts `user` has messaged by iterating over the `user`s
@@ -103,7 +102,7 @@ class Database(object):
 
         return list(contacts)
 
-    def get_conversation(self, gapi_id):
+    def get_conversation(self, user):
         """Conversation is defined as:
                 A list of messages between two parties, party A is always
                 user `110649862410112880601`, and party B is always the
@@ -111,12 +110,12 @@ class Database(object):
         """
         session_db = self.get_session()
         me = self.get_user(gapi_id=self.my_gapi_id)
-        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]
 
         # get all messages sent by me, to this person, ordered from oldest to newest
-        msgs_me = session_db.query(Message).filter(Message.sender == me.id,
-                                                   Message.receiver == user.id).\
-                                            order_by(Message.datetime_sent.asc()).\
+        msgs_me = session_db.query(Message).\
+                                filter(Message.sender == me.id,
+                                       Message.receiver == user.id).\
+                                order_by(Message.datetime_sent.asc()).\
                                 all()
 
         # get all messages sent by this person, to me, ordered from oldest to newest
