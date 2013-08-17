@@ -1,8 +1,9 @@
 from app.controller.login import GAPIException
-from app.model.model import Resume, Message
+from app.model.model import Resume, Message, User
 from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
+from pyramid.view import view_config
 import json
 import logging
 import random
@@ -16,7 +17,7 @@ def _json_response(body, status):
         body = json.dumps(body)
     except TypeError:
         body = ""
-        logger.error("Could not serialize to JSON! -- %s", body)
+        logger.exception("Could not serialize to JSON! -- %s", body)
     finally:
         return Response(body=body,
                         status=status,
@@ -26,22 +27,22 @@ def _json_response(body, status):
 # TODO: Become more restful
 
 class Router(object):
-    #================================================================================
+    #===========================================================================
     # Construction
-    #================================================================================
+    #===========================================================================
     def __init__(self, resource_manager,
                        template_builder,
                        login_manager,
                        database,
                        platform):
-        # Dependencies --------------------------------------------------------------
+        # Dependencies ---------------------------------------------------------
         self._resource_manager = resource_manager
         self._template_builder = template_builder
         self._login_manager = login_manager
         self._database = database
         self._platform = platform
 
-        # Internal state ------------------------------------------------------------
+        # Internal state -------------------------------------------------------
         self._static_root = None
         self._config = None
         self._app = None
@@ -53,7 +54,8 @@ class Router(object):
 
         # Route: /static/<file> (:method:static)
         self._config.add_static_view(name="static",
-                                     path=self._resource_manager.get_fs_resource_root())
+                                     path=self._resource_manager.\
+                                                    get_fs_resource_root())
 
         # Route: /login (:method:login)
         self._config.add_route("login", "/login")
@@ -91,7 +93,7 @@ class Router(object):
                               permission="read")
 
         # Route: /index (:method:update_message_board)
-        self._config.add_route("messageboard", "/messageboard")
+        self._config.add_route("messageboard", "/messageboard/{recipient}")
         self._config.add_view(self.update_message_board,
                               route_name="messageboard",
                               request_method="GET",
@@ -110,31 +112,32 @@ class Router(object):
                               route_name="index",
                               request_method="GET",
                               permission="read")
+        self._config.scan("app.controller.router")
 
         # Make WSGI application object
         self._app = self._config.make_wsgi_app()
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _get_static_root(self):
         """Return path to static assets/resources"""
         if not self._static_root:
             self._static_root = self._resource_manager.get_fs_resource_root()
         return self._static_root
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     def get_wsgi_app(self):
         """Return standard wsgi application,
                         http://www.python.org/dev/peps/pep-0333/
         """
         return self._app
 
-    #================================================================================
+    #===========================================================================
     # Routes
-    #================================================================================
+    #===========================================================================
     def logout(self, request):
         """Revoke current user's token and reset their session."""
         session = request.session
@@ -163,10 +166,7 @@ class Router(object):
         else:
             last_uploaded = ""
 
-        template_vars.update(resume={
-                                     "last_uploaded": last_uploaded,
-                                     }
-                             )
+        template_vars.update(resume={"last_uploaded": last_uploaded})
 
         return Response(self._template_builder.get_index(template_vars))
 
@@ -275,9 +275,27 @@ class Router(object):
         """Return a list of messages between the currently logged in user and
         myself, descending starting w/ most recent.
         """
-        session = request.session
-        convo = self._database.get_conversation(session["gapi_id"])
-        return _json_response(convo, 200)
+        session_db = self._database.get_session()
+        recipient = request.matchdict.get("recipient")
+
+        user = session_db.query(User).\
+                    filter(User.gapi_id == request.session["gapi_id"]).all()[0]
+
+        if recipient == "null":
+            conversation = self._database.get_conversation(user)
+        else:
+            recipient = session_db.query(User).\
+                            filter(User.id == int(recipient)).all()[0]
+            conversation = self._database.get_conversation(recipient)
+
+        contacts = self._database.get_contacts(user)
+        return _json_response({
+                               "convo": conversation,
+                               "contacts": [{
+                                             "name": user.name,
+                                             "id": user.id
+                                             } for user in contacts],
+                               }, 200)
 
     def message(self, request):
         decoded_msg = json.loads(request.body).get("msg")

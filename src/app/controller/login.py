@@ -29,9 +29,9 @@ class LoginManager(object):
     def start(self):
         self._gapi = build('plus', 'v1')
 
-    #================================================================================
+    #===========================================================================
     # Internal
-    #================================================================================
+    #===========================================================================
     def _create_and_update_local_user_if_needed(self, user_data):
         gapi_id = user_data["id"]
 
@@ -55,23 +55,24 @@ class LoginManager(object):
                         profile_pic_url=profile_pic_url,
                         )
             session_db.add(user)
+            session_db.commit()
 
             intro_msg = Message(
-                                sender=self._database.\
-                                            get_user(self._database.my_gapi_id).id,
-                                receiver=user.id,
-                                msg_data="Welcome to my site!",
-                                datetime_sent=self._platform.time_datetime_now(),
+                            sender=self._database.\
+                                get_user(gapi_id=self._database.my_gapi_id).id,
+                            receiver=user.id,
+                            msg_data="Welcome to my site!",
+                            datetime_sent=self._platform.time_datetime_now(),
                                 )
             session_db.add(intro_msg)
+            session_db.commit()
 
         # save
-        session_db.commit()
         return user
 
-    #================================================================================
+    #===========================================================================
     # Public
-    #================================================================================
+    #===========================================================================
     def login(self, session, state, auth_code):
         if state != session.get("state", 1):
             GAPIException("Invalid state parameter", 401)
@@ -82,7 +83,8 @@ class LoginManager(object):
         try:
             # Upgrade the authorization code into a credentials object
 
-            oauth_flow = flow_from_clientsecrets(self._path_client_secrets, scope='')
+            oauth_flow = flow_from_clientsecrets(self._path_client_secrets,
+                                                 scope='')
             oauth_flow.redirect_uri = 'postmessage'
             credentials = oauth_flow.step2_exchange(auth_code)
         except FlowExchangeError:
@@ -112,7 +114,7 @@ class LoginManager(object):
             user_data = self._gapi.people().get(userId="me").execute(http=http)
 
         except AccessTokenRefreshError:
-            raise GAPIException("Access token expcetion", 401)
+            raise GAPIException("Access token exception", 401)
 
         # create local user if needed
         user = self._create_and_update_local_user_if_needed(user_data)
