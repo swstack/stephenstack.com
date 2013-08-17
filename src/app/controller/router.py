@@ -16,7 +16,7 @@ def _json_response(body, status):
         body = json.dumps(body)
     except TypeError:
         body = ""
-        logger.error("Could not serialize to JSON! -- %s", body)
+        logger.exception("Could not serialize to JSON! -- %s", body)
     finally:
         return Response(body=body,
                         status=status,
@@ -164,10 +164,7 @@ class Router(object):
         else:
             last_uploaded = ""
 
-        template_vars.update(resume={
-                                     "last_uploaded": last_uploaded,
-                                     }
-                             )
+        template_vars.update(resume={"last_uploaded": last_uploaded})
 
         return Response(self._template_builder.get_index(template_vars))
 
@@ -278,7 +275,15 @@ class Router(object):
         """
         session = request.session
         convo = self._database.get_conversation(session["gapi_id"])
-        return _json_response(convo, 200)
+        contacts = self._database.get_contacts(session["gapi_id"])
+        return _json_response({
+                               "convo": convo,
+                               "contacts": [{
+                                             "name": user.name,
+                                             "id": user.id
+                                             } for user in contacts
+                                            ],
+                               }, 200)
 
     def message(self, request):
         decoded_msg = json.loads(request.body).get("msg")

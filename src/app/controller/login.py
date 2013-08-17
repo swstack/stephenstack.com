@@ -55,18 +55,19 @@ class LoginManager(object):
                         profile_pic_url=profile_pic_url,
                         )
             session_db.add(user)
+            session_db.commit()
 
             intro_msg = Message(
-                                sender=self._database.\
-                                            get_user(self._database.my_gapi_id).id,
-                                receiver=user.id,
-                                msg_data="Welcome to my site!",
-                                datetime_sent=self._platform.time_datetime_now(),
+                            sender=self._database.\
+                                get_user(gapi_id=self._database.my_gapi_id).id,
+                            receiver=user.id,
+                            msg_data="Welcome to my site!",
+                            datetime_sent=self._platform.time_datetime_now(),
                                 )
             session_db.add(intro_msg)
+            session_db.commit()
 
         # save
-        session_db.commit()
         return user
 
     #===========================================================================
@@ -113,7 +114,7 @@ class LoginManager(object):
             user_data = self._gapi.people().get(userId="me").execute(http=http)
 
         except AccessTokenRefreshError:
-            raise GAPIException("Access token expcetion", 401)
+            raise GAPIException("Access token exception", 401)
 
         # create local user if needed
         user = self._create_and_update_local_user_if_needed(user_data)

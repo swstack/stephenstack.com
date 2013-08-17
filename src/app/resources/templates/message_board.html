@@ -9,8 +9,8 @@
         </div>
         <div class="col-lg-8 col-offset-2 col-msg-board" id="cont-logged-in">
             <h2 style="color: #333333">Message Board</h2>
-            <div id="contacts">
-                <select>
+            <div>
+                <select id="contacts">
                 </select>
             </div>
             <div id="msg-board">
@@ -28,10 +28,11 @@
 </div>
 
 <script type="text/javascript">
-function MessageBoard (messages) {
-	// experimenting with OO javascript
-    this.messages = messages;
+function MessageBoard (board_data) {
+	// construct
+    this.board_data = board_data;
 
+	// methods: internal
     this._displayMessage = function(username, thumbnail, message, htmlclass) {
     	username = "<b>" + username + "</b><br \>";
     	thumbnail = "<img src='" + thumbnail + "'>";
@@ -39,16 +40,32 @@ function MessageBoard (messages) {
     	                                                thumbnail + 
     	                                                 username + 
     	                                                  message + 
-                                                                  "</div>";
+                          "</div>";
     	$("#msg-board").append(htmlMessage);
     };
 
+    this._displayContact = function(contact) {
+    	$("#contacts").append("<option value='" + contact.id + "'>"
+    			                       + contact.name +
+    			              "</option>");
+    }
+    
+ // methods: external
     this.update = function() {
     	/* Handle convo length of 0 */
-    	
     	$("#msg-board").empty();
+    	$("#contacts").empty();
+    	
+    	
+    	var msgs = this.board_data.convo;
+    	var contacts = this.board_data.contacts;
+    	
+    	for (var i = 0; i < contacts.length; i++) {
+    		var contact = contacts[i]
+    		this._displayContact(contact);
+    	}
 
-    	var msgLength = this.messages.length;
+    	var msgLength = msgs.length;
 
     	if (msgLength < 1) {
     		console.log("-- No convo! --");
@@ -57,19 +74,18 @@ function MessageBoard (messages) {
 	
     	// randomly select the first user in the convo as the person who will
     	// appear on the left side of the message board
-    	var preDefinedSender = this.messages[0].sender.gapi_id;
+    	var preDefinedSender = msgs[0].sender.gapi_id;
 
-    	for (var i = 0; i < this.messages.length; i++) {
-    		var msg = this.messages[i];
+    	for (var i = 0; i < msgs.length; i++) {
+    		var msg = msgs[i];
     		var sender = msg.sender;
-
     		if (sender.gapi_id == preDefinedSender) {
-    			// left
-    			this._displayMessage(sender.name, sender.thumbnail, msg.msg, "left");
-    		} else {
-    			// right
-    			this._displayMessage(sender.name, sender.thumbnail, msg.msg, "right");
-    		}
+                // left
+                this._displayMessage(sender.name, sender.thumbnail, msg.msg, "left");
+            } else {
+                // right
+                this._displayMessage(sender.name, sender.thumbnail, msg.msg, "right");
+            }
     	}
     };
 }

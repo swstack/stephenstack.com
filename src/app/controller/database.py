@@ -28,6 +28,9 @@ class Database(object):
         return session_db.query(Resume).order_by(Resume.datetime_uploaded.desc())
 
     def _merge_conversations(self, convo_a, convo_b):
+        """Given two lists of messages, return one list sorted ascending
+        by `datetime_sent`
+        """
         if len(convo_a) < 1:
             result = convo_b
 
@@ -74,7 +77,8 @@ class Database(object):
 
         if uid:
             return \
-                _try_index_zero(session_db.query(User).filter(User.id == uid).all())
+                _try_index_zero(session_db.query(User).\
+                                    filter(User.id == uid).all())
 
         if gapi_id:
             return \
@@ -83,7 +87,28 @@ class Database(object):
 
         return None
 
+    def get_contacts(self, gapi_id):
+        """Contacts are defined as:
+                A list of users that the currently logged in user has an
+                ongoing conversation with.
+        """
+        session_db = self.get_session()
+        user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]
+        contacts = set()
+
+        # find all contacts `user` has messaged by iterating over the `user`s
+        # messages and making a set of the recipients
+        for msg in session_db.query(Message).filter(Message.sender == user.id):
+            contacts.add(self.get_user(msg.receiver))
+
+        return list(contacts)
+
     def get_conversation(self, gapi_id):
+        """Conversation is defined as:
+                A list of messages between two parties, party A is always
+                user `110649862410112880601`, and party B is always the
+                currently logged in user.
+        """
         session_db = self.get_session()
         me = self.get_user(gapi_id=self.my_gapi_id)
         user = session_db.query(User).filter(User.gapi_id == gapi_id).all()[0]

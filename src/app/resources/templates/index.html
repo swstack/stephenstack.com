@@ -68,9 +68,8 @@
 		        $.ajax({
 		            type : 'GET',
 		            url : '/messageboard',
-		            success : function(messages) {
-		            	// experimenting with OO javascript
-		                var mb = new MessageBoard(messages);
+		            success : function(board_data) {
+		                var mb = new MessageBoard(board_data);
 		                mb.update();
 		            },
 		        });
