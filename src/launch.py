@@ -1,8 +1,8 @@
-from app.controller.core import ApplicationCore
+from app.controller.cores.dev import DevCore
 
 
 def launch():
-    ApplicationCore().start()
+    DevCore().start()
 
 
 if __name__ == "__main__":

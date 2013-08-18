@@ -1,34 +1,17 @@
+from app.controller.cores.core import ApplicationCoreABC, ROOT
 from app.controller.database import Database
-from app.controller.router import Router
 from app.controller.login import LoginManager
+from app.controller.router import Router
 from app.util.logging_configurator import LoggingConfigurator
+from app.util.platform import LinuxPlatform
 from app.util.resource_manager import ResourceManager
 from app.view.templates import TemplateBuilder
-from logging import getLogger
+from flup.server.fcgi import WSGIServer
 import os
-import time
-from app.debug.server import Server
-from app.util.platform import LinuxPlatform
-
-ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__),
-                                     "..", "..", ".."))
-
-logger = getLogger("core")
 
 
-class ApplicationCore(object):
-    """Main component aggregator and Business logic"""
-
-    #===========================================================================
-    # Construction
-    #===========================================================================
-    def __init__(self):
-        self.platform = None
-        self.resource_manager = None
-        self.logging_configurator = None
-        self.database = None
-        self.resume_builder = None
-        self.template_builder = None
+class ProductionCore(ApplicationCoreABC):
+    """Core used for production"""
 
     def start(self):
         """Start the app"""
@@ -52,7 +35,6 @@ class ApplicationCore(object):
                              self.login_manager,
                              self.database,
                              self.platform)
-        self.debug_server = Server(self.router)
 
         # Start all Components -------------------------------------------------
         self._start_component("Linux Platform", self.platform)
@@ -65,21 +47,4 @@ class ApplicationCore(object):
 
         self._start_component("Router", self.router)
 
-        self._start_component("Debug Server", self.debug_server)
-
-        # Main loop ------------------------------------------------------------
-        try:
-            print "Ctrl+C to quit..."
-            while True:
-                time.sleep(10)
-        except KeyboardInterrupt:
-            print "Interrupt received... shutting down"
-            os._exit(0)
-
-    #===========================================================================
-    # Internal
-    #===========================================================================
-    def _start_component(self, component_name, component):
-        logger.info("Starting %s...", component_name)
-        component.start()
-        logger.info("...%s complete.", component_name)
+        WSGIServer(self.router.get_wsgi_app()).run()
